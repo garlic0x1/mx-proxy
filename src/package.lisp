@@ -29,6 +29,10 @@
    ;; ssl.lisp
    :send-request-ssl
 
+   ;; config.lisp
+   :config
+   :config-home
+
    ;; utils.lisp
    :message-raw*
    ))

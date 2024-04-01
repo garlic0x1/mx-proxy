@@ -62,4 +62,5 @@
     (mx-proxy:connect-database)
     (setf *main-app* (make-instance 'main-app :pack '(:fill :both :expand t)))
     (redraw-modeline)
+    (mx-proxy:run-hook :init)
     nil))

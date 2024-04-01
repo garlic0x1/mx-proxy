@@ -20,7 +20,8 @@
                              (:file "commands")
                              (:file "database")
                              (:file "ssl")
-                             (:file "server")))))
+                             (:file "server")
+                             (:file "config")))))
 
 (asdf:defsystem "mx-proxy/qt"
   :defsystem-depends-on (:qtools)
