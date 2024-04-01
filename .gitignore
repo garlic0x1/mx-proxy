@@ -1,0 +1,21 @@
+# IDE
+.DS_Store
+.idea
+*.log
+tmp/
+
+# Binaries
+proxy
+bin/
+
+# Compiled objects
+*.fasl
+*.lx64fsl
+
+# SSL certificates
+certs/*.pem
+*.pem
+
+# Debug documents
+dev.md
+dev.org
