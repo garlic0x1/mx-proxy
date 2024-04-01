@@ -1,5 +1,5 @@
 (defpackage :http
-  (:use :cl :alexandria-2 )
+  (:use :cl :alexandria-2)
   (:local-nicknames (:us :usocket))
   (:import-from :cl-annot.class :export-class)
   (:export

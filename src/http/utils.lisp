@@ -32,13 +32,13 @@
     (write-string string stream)
     (crlf stream)))
 
-(defun make-keyword (string)
+(defun make-keyword* (string)
   "Interns upcase keyword like the reader does."
   (intern (string-upcase string) :keyword))
 
 (defun inflate-alist (jsonb)
   (let ((yason:*parse-object-as* :alist)
-        (yason:*parse-object-key-fn* #'make-keyword))
+        (yason:*parse-object-key-fn* #'make-keyword*))
     (yason:parse jsonb)))
 
 (defun deflate-alist (alist)

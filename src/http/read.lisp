@@ -19,7 +19,7 @@
   "Read headers into an alist of keywords to strings."
   (flet ((split-header (line)
            (let ((split (mapcar #'str:trim (str:split ":" line :limit 2))))
-             (cons (make-keyword (first split)) (second split)))))
+             (cons (make-keyword* (first split)) (second split)))))
     (loop :with headers := '()
           :for line := (chunga:read-line* stream)
           :do (write-line-cr line *capture*)

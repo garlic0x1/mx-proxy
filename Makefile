@@ -1,16 +1,16 @@
 LISP ?= ${shell which sbcl}
 
 clean:
-	rm bin/*
+	-rm bin/*
 
 tk: clean
-	$(LISP) --load proxy.asd \
-		--eval "(ql:quickload '(:proxy :proxy/tk))" \
-		--eval "(asdf:make :proxy/tk)" \
+	$(LISP) --load mx-proxy.asd \
+		--eval "(ql:quickload '(:mx-proxy :mx-proxy/tk))" \
+		--eval "(asdf:make :mx-proxy/tk)" \
 		--eval "(quit)"
 
 qt: clean
-	$(LISP) --load proxy.asd \
-		--eval "(ql:quickload '(:proxy :proxy/qt))" \
-		--eval "(asdf:make :proxy/qt)" \
+	$(LISP) --load mx-proxy.asd \
+		--eval "(ql:quickload '(:mx-proxy :mx-proxy/qt))" \
+		--eval "(asdf:make :mx-proxy/qt)" \
 		--eval "(quit)"

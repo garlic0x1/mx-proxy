@@ -3,7 +3,7 @@
 (defun message-raw* (message &key decompress)
   "Get the raw message and optionally automagically decompress."
   (let* ((raw (http:message-raw message))
-         (separator (http/util:crlf nil 2))
+         (separator (http:crlf nil 2))
          (split (str:split separator raw :limit 2))
          (top (first split))
          (bottom (if decompress
