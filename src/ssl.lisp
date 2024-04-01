@@ -4,7 +4,7 @@
   (namestring
    (merge-pathnames
     (format nil "certs/~a" name)
-    (asdf:system-source-directory :proxy))))
+    (asdf:system-source-directory :mx-proxy))))
 
 (defun certificate (host &key create)
   "Retrieve or generate certificate and key for host."
