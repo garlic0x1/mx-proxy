@@ -4,7 +4,7 @@ An interactive web proxy.
 
 Depends on:
 - SBCL + Quicklisp
-- FiloSottile/mkcert
+- [FiloSottile/mkcert](https://github.com/FiloSottile/mkcert)
 - SQLite
 - Tk/Tcl
 
@@ -18,7 +18,7 @@ make tk
 
 Depends on:
 - Lem
-- FiloSottile/mkcert
+- [FiloSottile/mkcert](https://github.com/FiloSottile/mkcert)
 - SQLite
 
 ```lisp
@@ -39,3 +39,7 @@ The proxy server uses the following hooks which you can attach functions to:
 Use `define-command` to add interactive functionality. The `mx-proxy` namespace
 exports this macro in Tk and Qt frontends, Lem has its own implementation which
 behaves the same.
+
+# Installation notes
+
+Make sure `mkcert` is in your path and you have run `mkcert -install` and restarted your browser.
