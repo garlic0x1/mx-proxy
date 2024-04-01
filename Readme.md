@@ -26,3 +26,14 @@ Depends on:
 ```
 
 ![Lem](screenshots/lem-frontend.png)　
+
+# Hooks
+
+The proxy server uses the following hooks which you can attach functions to:
+- :on-request      - args: http:request
+- :on-response     - args: http:request http:response
+- :on-message-pair - args: http:message-pair
+
+# Commands
+
+In Tk and Qt frontends, use `define-command` to add interactive functionality.
