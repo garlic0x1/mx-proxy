@@ -8,12 +8,13 @@
         (and (probe-file dot) dot)
         xdg)))
 
-(defun config-pathname ()
-  "File for persistent config db."
-  (merge-pathnames "config.lisp" (config-home)))
-
 (defun ensure-config-pathname ()
-  (ensure-directories-exist (config-pathname)))
+  "File for persistent config db."
+  (ensure-directories-exist (merge-pathnames "config.lisp" (config-home))))
+
+(defun ensure-init-pathname ()
+  "Init file to be loaded into program."
+  (ensure-directories-exist (merge-pathnames "init.lisp" (config-home))))
 
 (defun config-plist ()
   "Get the persistent config db as a plist."
@@ -38,9 +39,9 @@
   value)
 
 (defun site-init ()
-  (with-open-file (i (merge-pathnames "init.lisp" (config-home)))
+  (with-open-file (init (ensure-init-pathname))
     (let ((*package* (find-package :cl-user)))
-      (load i))))
+      (load init))))
 
 (register-hook (:init :load-config) ()
   (site-init))
