@@ -26,6 +26,9 @@
    :stop-server
    :replay
 
+   ;; ssl.lisp
+   :send-request-ssl
+
    ;; utils.lisp
    :message-raw*
    ))

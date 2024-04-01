@@ -60,3 +60,12 @@
   :build-operation "program-op"
   :build-pathname "bin/mx-proxy"
   :entry-point "mx-proxy/tk:main")
+
+(asdf:defsystem "mx-proxy/lem"
+  :components ((:module "frontend/lem"
+                :components ((:file "package")
+                             (:file "modes")
+                             (:file "buffers")
+                             (:file "render")
+                             (:file "commands")
+                             (:file "lem")))))
