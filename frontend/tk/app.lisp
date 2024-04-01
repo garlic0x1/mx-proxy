@@ -7,6 +7,19 @@
    :completion (completion (mx-proxy:all-command-names))
    :message "Apropos command"))
 
+(define-command apropos-function () ()
+  "Get info about a function."
+  (prompt-for-string
+   (lambda (str)
+     (with-tk-error
+       (alert
+        (with-output-to-string (c)
+          (describe (read-from-string str) c)))))
+   :completion (completion
+                (mapcar (lambda (sym) (format nil "~(~s~)" sym))
+                        (mx-proxy:package-symbols :mx-proxy)))
+   :message "Apropos function"))
+
 (define-command start-server (port) ("iPort")
   "Start the proxy server on port."
   (with-tk-error (mx-proxy:start-server :port port)))

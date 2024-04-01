@@ -1,5 +1,11 @@
 (in-package :mx-proxy)
 
+(defun package-symbols (package)
+  (let ((syms nil))
+    (do-external-symbols (sym package)
+      (push sym syms))
+    syms))
+
 (defun message-raw* (message &key decompress)
   "Get the raw message and optionally automagically decompress."
   (let* ((raw (http:message-raw message))

@@ -35,4 +35,5 @@
 
    ;; utils.lisp
    :message-raw*
+   :package-symbols
    ))
