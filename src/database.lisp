@@ -10,15 +10,13 @@
                   (t        (mito:migrate-table table)))))
 
 (defun connect-database (&key (file "/tmp/proxy.sqlite3"))
-  "Connect to a Sqlite database.
-This serves as a 'project file' for proxy sessions."
+  "Connect to a Sqlite database. This serves as a 'project file' for proxy sessions."
   (mito:connect-toplevel :sqlite3 :database-name file)
   (setf *db-file* file)
   (migrate-database :ensure t))
 
 (defun db-insert-pair (request response &key (metadata '((:normal))))
-  "Insert a message pair into the database.
-   Optionally provide an alist of metadata"
+  "Insert a message pair into the database. Optionally provide an alist of metadata"
   (let ((mp (mito:insert-dao
              (make-instance 'http:message-pair
                             :metadata metadata

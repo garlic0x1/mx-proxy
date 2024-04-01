@@ -36,4 +36,6 @@ The proxy server uses the following hooks which you can attach functions to:
 
 # Commands
 
-In Tk and Qt frontends, use `define-command` to add interactive functionality.
+Use `define-command` to add interactive functionality. The `mx-proxy` namespace
+exports this macro in Tk and Qt frontends, Lem has its own implementation which
+behaves the same.

@@ -6,19 +6,12 @@
 (defparameter *pairs* '())
 (defvar *current-request* nil)
 (defvar *current-response* nil)
-
 (defvar *traffic-lock* (bt:make-lock))
 
-(defmethod mito:insert-dao :before ((pair http:message-pair))
+(mx-proxy:register-hook (:on-message-pair :traffic) (mp)
   (bt:with-lock-held (*traffic-lock*)
-    (push pair *pairs*)
+    (push mp *pairs*)
     (render-traffic-list *pairs*)))
-
-;; (proxy:add-hook proxy:*pair-hook*
-;;   (lambda (pair)
-;;     (bt:with-lock-held (*traffic-lock*)
-;;       (push pair *pairs*)
-;; (render-traffic-list *pairs*))))
 
 (defun clear-buffer (buffer)
   (delete-between-points
