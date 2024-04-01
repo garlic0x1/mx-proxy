@@ -1,43 +1,5 @@
 (in-package :mx-proxy/tk)
 
-(define-command apropos-command () ()
-  "Get info about a command."
-  (prompt-for-string
-   (lambda (str) (alert (gethash str mx-proxy:*commands*)))
-   :completion (completion (mx-proxy:all-command-names))
-   :message "Apropos command"))
-
-(define-command apropos-function () ()
-  "Get info about a function."
-  (prompt-for-string
-   (lambda (str)
-     (with-tk-error
-       (alert
-        (with-output-to-string (c)
-          (describe (read-from-string str) c)))))
-   :completion (completion
-                (mapcar (lambda (sym) (format nil "~(~s~)" sym))
-                        (mx-proxy:package-symbols :mx-proxy)))
-   :message "Apropos function"))
-
-(define-command start-server (port) ("iPort")
-  "Start the proxy server on port."
-  (with-tk-error (mx-proxy:start-server :port port)))
-
-(define-command stop-server () ()
-  "Stop the proxy server"
-  (mx-proxy:stop-server))
-
-(define-command load-project (path) ("fSelect file")
-  "Pick a SQLite file to work with."
-  (mito:disconnect-toplevel)
-  (with-tk-error (mx-proxy:connect-database :file path))
-  (mx-proxy:run-hook :on-load-project))
-
-(define-command save-project (path) ("fSave path")
-  "Copy current project database to file."
-  (uiop:copy-file mx-proxy:*db-file* path))
-
 (defwidget main-app (frame)
   ()
   ((main-view traffic

@@ -37,6 +37,21 @@
                                     (prompt-swap widget "")))))
     (grid widget 1 0 :sticky :nsew)))
 
+(defun prompt-for-yes-or-no (callback
+                             &key (message "Yes or no")
+                                  (completion (completion '("yes" "no"))))
+  (let ((widget nil))
+    (setf widget (make-instance 'prompt
+                                :master *main-app*
+                                :message message
+                                :completion completion
+                                :command (lambda (value)
+                                           (if (string-equal :yes value)
+                                               (funcall callback t)
+                                               (funcall callback nil))
+                                           (destroy widget))))
+    (grid widget 1 0 :sticky :nsew)))
+
 (defun prompt-for-spec (callback spec)
   "Lem style prompt spec, with type as the first char
 and message as the rest of the string. ex: \"fFile prompt\" \"sString prompt\""

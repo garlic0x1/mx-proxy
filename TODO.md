@@ -1,5 +1,4 @@
 Features:
-- create persistent config/settings system
 - Qt frontend
 - dedupe frontend prompt/command logic
 - server global status variable (for modeline)
@@ -8,3 +7,4 @@ Features:
 
 Bugs:
 - chunked encoding decompression is weird
+- Tk: make all prompts/messages close on escape/cancel
