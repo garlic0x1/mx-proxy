@@ -13,11 +13,11 @@
                                  :display #'display-message-pair
                                  :contents (reverse
                                             (mito:select-dao 'http:message-pair)))))
-    (setf
-     (scrolled-window-child scroll) (gobject genlist)
-     (paned-start-child paned) scroll
-     (paned-end-child paned) (gobject message-pair)
-     (gobject self) paned)))
+    (setf (widget-size-request scroll) '(400 200)
+          (scrolled-window-child scroll) (gobject genlist)
+          (paned-start-child paned) scroll
+          (paned-end-child paned) (gobject message-pair)
+          (gobject self) paned)))
 
 (defun display-message-pair (item)
   (let ((req (http:message-pair-request item))

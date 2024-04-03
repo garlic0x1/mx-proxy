@@ -15,6 +15,7 @@
 
    ;; interface.lisp
    :*interface*
+   :*default-completion-test*
    :make-completion
    :fuzzy-match-p
    :file-completion

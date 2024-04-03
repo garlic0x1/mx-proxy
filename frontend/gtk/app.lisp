@@ -3,6 +3,7 @@
 (defparameter mx-proxy:*interface* :gtk)
 
 (defvar *top-grid* nil)
+(defvar *top-window* nil)
 
 (define-application (:name main :id "garlic0x1.mx-proxy.main-window")
   (define-main-window (w (make-application-window :application *application*))
@@ -13,7 +14,8 @@
       (grid-attach grid (gobject traffic) 0 0 1 1)
 
       (setf (window-child w) grid
-            *top-grid* grid)
+            *top-grid* grid
+            *top-window* w)
 
       (let ((controller (make-event-controller-key)))
         (connect controller "key-pressed"

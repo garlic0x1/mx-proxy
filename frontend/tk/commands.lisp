@@ -1,40 +1,21 @@
 (in-package :mx-proxy/tk)
 
 ;; frontend shim stuff
-
-(defmethod call-with-prompts ((command mx-proxy:command))
-  (prompt-for-specs
-   (lambda (&rest args)
-     (apply (mx-proxy:command-symbol command) args)
-     (mx-proxy:run-hook :on-command command))
-   (mx-proxy:command-prompts command)))
-
-(defmethod call-with-prompts ((str string))
-  (when-let ((cmd (gethash str mx-proxy:*commands*)))
-    (call-with-prompts cmd)))
-
-(defmethod call-with-prompts ((sym symbol))
-  (when-let ((cmd (gethash (format nil "~(~a~)" sym) mx-proxy:*commands*)))
-    (call-with-prompts cmd)))
-
 (defun execute-command ()
-  (prompt-for-string
-   'call-with-prompts
+  (mx-proxy:prompt-for-string
+   'mx-proxy:call-with-prompts
    :completion (completion (mx-proxy:all-command-names))
    :message "Command"))
 
 ;; user interaction stuff
 
-(define-command apropos-command () ()
+(define-command apropos-command (str) ("cApropos Command")
   "Get info about a command."
-  (prompt-for-string
-   (lambda (str) (alert (gethash str mx-proxy:*commands*)))
-   :completion (completion (mx-proxy:all-command-names))
-   :message "Apropos command"))
+  (alert (gethash str mx-proxy:*commands*)))
 
 (define-command apropos-function () ()
   "Get info about a function."
-  (prompt-for-string
+  (mx-proxy:prompt-for-string
    (lambda (str)
      (with-tk-error
        (alert
@@ -63,8 +44,6 @@
   "Copy current project database to file."
   (uiop:copy-file mx-proxy:*db-file* path))
 
-(define-command divide-by-zero (num) ("iNumber")
+(define-command divide-by-zero (num sure) ("iNumber" "bAre you sure?")
   "Really important stuff."
-  (prompt-for-yes-or-no
-   (lambda (value) (when value (with-tk-error (/ num 0))))
-   :message "Are you sure?"))
+  (when sure (with-tk-error (/ num 0))))

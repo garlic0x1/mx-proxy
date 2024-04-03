@@ -3,7 +3,8 @@
 (defparameter *interface* nil)
 (defparameter *default-completion-test* #'search)
 
-(defgeneric prompt-for-string* (implementation callback &key message completion))
+(defgeneric prompt-for-string*
+    (implementation callback &key message completion start))
 
 (defun fuzzy-match-p (str elt &optional ignore-case)
   (loop :with start := 0
@@ -24,50 +25,62 @@
                                    (uiop:directory-files dir))))))
 
 (defun prompt-for-string
-    (callback &key (message "String Prompt") (completion #'list))
+    (callback &key (message "String Prompt") (completion #'list) (start ""))
   (prompt-for-string*
    *interface*
    callback
+   :start start
    :message message
    :completion completion))
 
 (defun prompt-for-yes-or-no
     (callback &key (message "Yes or No Prompt")
-                   (completion (make-completion '("Yes" "No"))))
+                   (completion (make-completion '("Yes" "No")))
+                   (start ""))
   (prompt-for-string*
    *interface*
    (lambda (str)
      (funcall callback (string-equal :yes str)))
    :message message
+   :start start
    :completion completion))
 
 (defun prompt-for-file
-    (callback &key (message "File Prompt") (completion #'file-completion))
+    (callback &key (message "File Prompt")
+                   (completion #'file-completion)
+                   (start (namestring (user-homedir-pathname))))
   (prompt-for-string*
    *interface*
    callback
    :message message
+   :start start
    :completion completion))
 
 (defun prompt-for-integer
-    (callback &key (message "Integer Prompt") (completion #'list))
+    (callback &key (message "Integer Prompt")
+                   (completion #'list)
+                   (start ""))
   (prompt-for-string*
    *interface*
    (lambda (str)
-     (when-let ((num (parse-integer str)))
+     (when-let ((num (ignore-errors (parse-integer str))))
        (funcall callback num)))
    :message message
+   :start start
    :completion completion))
 
 (defun prompt-for-command
-    (callback &key (message "Command Prompt"))
+    (callback &key (message "Command Prompt")
+                   (completion (make-completion (all-command-names)))
+                   (start ""))
   (prompt-for-string*
    *interface*
    (lambda (str)
      (when-let ((cmd (gethash str *commands*)))
        (funcall callback cmd)))
    :message message
-   :completion (make-completion (all-command-names))))
+   :start start
+   :completion completion))
 
 (defun prompt-for-spec (callback spec)
   (funcall
