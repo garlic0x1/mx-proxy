@@ -10,6 +10,7 @@
                                  :on-change (lambda (val)
                                               (swap message-pair val)
                                               (print val))
+                                 :display #'display-message-pair
                                  :contents (reverse
                                             (mito:select-dao 'http:message-pair)))))
     (setf
@@ -17,3 +18,12 @@
      (paned-start-child paned) scroll
      (paned-end-child paned) (gobject message-pair)
      (gobject self) paned)))
+
+(defun display-message-pair (item)
+  (let ((req (http:message-pair-request item))
+        (resp (http:message-pair-response item)))
+    (format nil "~a ~a ~a ~a"
+            (ignore-errors (http:request-method req))
+            (ignore-errors (http:request-uri req))
+            (ignore-errors (http:response-status-code resp))
+            (ignore-errors (http:response-status resp)))))

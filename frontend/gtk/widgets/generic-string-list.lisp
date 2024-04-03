@@ -36,7 +36,10 @@
     (connect factory "setup"
              (lambda (factory item)
                (declare (ignore factory))
-               (setf (list-item-child item) (make-label :str ""))))
+               (let ((label (make-label :str "")))
+                 (setf (list-item-child item) label
+                       (widget-halign label) +align-start+)
+                 label)))
 
     (connect factory "bind"
              (lambda (factory item)
