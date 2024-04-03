@@ -35,6 +35,7 @@
                 :components ((:file "package")
                              (:file "settings")
                              (:file "message-pair")
+                             (:file "traffic")
                              (:file "app"))))
   :build-operation "program-op"
   :build-pathname "bin/mx-proxy"
