@@ -29,10 +29,11 @@
                                      :strings (funcall (completion self)
                                                        (value self))))
          (entry (make-entry))
-         (ok-button (make-button :label "Ok"))
+         (ok-button (make-button :label "Okay"))
          (cancel-button (make-button :label "Cancel")))
     (setf (entry-buffer-text (entry-buffer entry)) (value self)
-          (gobject self) grid)
+          (gobject self) grid
+          (widget-focusable-p entry) t)
     (grid-attach grid label                0 0 4 1)
     (grid-attach grid (gobject string-list) 0 1 4 1)
     (grid-attach grid entry                0 2 2 1)
@@ -73,4 +74,8 @@
                              (value self) new
                              (editable-position entry) -1))
                      (values gdk4:+event-propagate+))))
-      (widget-add-controller entry controller))))
+      (widget-add-controller entry controller))
+    (print "focus:")
+    (print (widget-can-focus-p entry))
+    (print (widget-focusable-p entry))
+    (print (widget-grab-focus entry))))

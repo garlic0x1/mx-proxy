@@ -10,7 +10,7 @@
               :value (error-message-value self))
    (ok-button button
               :grid '(1 0 :sticky :nsew)
-              :text "Ok"
+              :text "Okay"
               :command 'exit-nodgui))
   (grid-rowconfigure self 0 :weight 1)
   (grid-rowconfigure self 1 :minsize 32)
@@ -21,6 +21,11 @@
     (make-instance 'error-message
                    :pack '(:fill :both :expand t)
                    :value c)))
+
+(defmethod mx-proxy:show-error-message
+    ((interface (eql :tk)) condition &key severity)
+  (declare (ignore severity))
+  (tk-error condition))
 
 (defmacro with-tk-error (&body body)
   `(handler-case (progn ,@body)

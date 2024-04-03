@@ -1,6 +1,5 @@
 (in-package :mx-proxy/tk)
 
-;; frontend shim stuff
 (defun execute-command ()
   (mx-proxy:prompt-for-string
    'mx-proxy:call-with-prompts
@@ -28,7 +27,7 @@
 
 (define-command start-server (port) ("iPort")
   "Start the proxy server on port."
-  (with-tk-error (mx-proxy:start-server :port port)))
+  (mx-proxy:with-ui-errors (mx-proxy:start-server :port port)))
 
 (define-command stop-server () ()
   "Stop the proxy server"
@@ -37,7 +36,7 @@
 (define-command load-project (path) ("fSelect file")
   "Pick a SQLite file to work with."
   (mito:disconnect-toplevel)
-  (with-tk-error (mx-proxy:connect-database :file path))
+  (mx-proxy:with-ui-errors (mx-proxy:connect-database :file path))
   (mx-proxy:run-hook :on-load-project))
 
 (define-command save-project (path) ("fSave path")
@@ -46,4 +45,4 @@
 
 (define-command divide-by-zero (num sure) ("iNumber" "bAre you sure?")
   "Really important stuff."
-  (when sure (with-tk-error (/ num 0))))
+  (when sure (mx-proxy:with-ui-errors (/ num 0))))

@@ -31,6 +31,7 @@
                              (:file "widget")
                              (:file "string-list")
                              (:file "generic-string-list")
+                             (:file "error-message")
                              (:file "prompt")))
                (:module "frontend/gtk"
                 :components ((:file "package")
@@ -39,6 +40,7 @@
                              (:file "message-pair")
                              (:file "traffic")
                              (:file "prompt")
+                             (:file "errors")
                              (:file "app"))))
   :build-operation "program-op"
   :build-pathname "bin/mx-proxy"

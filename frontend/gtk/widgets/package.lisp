@@ -14,4 +14,6 @@
    :generic-string-list-append
    ;; prompt.lisp
    :prompt
+   ;; error-message.lisp
+   :error-message
    ))

@@ -9,5 +9,4 @@
 (defun apply-theme (file name)
   "Filename, not full path."
   (eval-tcl-file (theme-file file))
-  (format-wish "ttk::style theme use ~a" name)
-  )
+  (format-wish "ttk::style theme use ~a" name))

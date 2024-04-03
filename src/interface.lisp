@@ -3,8 +3,12 @@
 (defparameter *interface* nil)
 (defparameter *default-completion-test* #'search)
 
-(defgeneric prompt-for-string*
-    (implementation callback &key message completion start))
+(defgeneric prompt-for-string* (interface callback &key message completion start))
+(defgeneric show-error-message (interface condition &key severity))
+
+(defmacro with-ui-errors (&body body)
+  `(handler-case (progn ,@body)
+     (error (c) (show-error-message *interface* c))))
 
 (defun fuzzy-match-p (str elt &optional ignore-case)
   (loop :with start := 0
