@@ -1,8 +1,5 @@
 (in-package :mx-proxy)
 
-(defun completion (selection &key (test #'search))
-  (lambda (str) (remove-if-not (curry test str) selection)))
-
 (defvar *commands* (make-hash-table :test #'equal))
 
 (defclass command ()

@@ -1,17 +1,27 @@
 (in-package :mx-proxy/gtk)
 
+(defvar *top-grid* nil)
+
 (define-application (:name main :id "garlic0x1.mx-proxy.main-window")
   (define-main-window (w (make-application-window :application *application*))
     (mx-proxy:connect-database)
-    (setf (window-child w)
-          (gobject (make-instance 'traffic)))
-    ;; (setf
-    ;;  (window-child w)
-    ;;  (gobject (make-instance 'message-pair
-    ;;                          :value (nth 4 (mito:select-dao 'http:message-pair)))))
-    ;; (setf (window-child w)
-    ;;       (gobject (make-instance 'gtk-widgets::settings)))
-    ;; (let ((insp (make-instance 'inspector :value '(:hi :world))))
-    ;;   (setf (window-child w) (widget insp)))
+    (let* ((grid (make-grid))
+           (traffic (make-instance 'traffic)))
+
+      (grid-attach grid (gobject traffic) 0 0 1 1)
+
+      (setf (window-child w) grid
+            *top-grid* grid)
+
+      (let ((controller (make-event-controller-key)))
+        (connect controller "key-pressed"
+                 (lambda (widget kval kcode state)
+                   (declare (ignore widget kcode))
+                   (if (and (= 8 state)
+                            (= (char-code #\x) kval))
+                       (prompt-and-execute-command)
+                       (values gdk4:+event-propagate+))))
+        (widget-add-controller w controller)))
+
     (unless (widget-visible-p w)
       (window-present w))))

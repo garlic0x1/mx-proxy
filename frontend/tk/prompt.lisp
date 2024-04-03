@@ -69,3 +69,7 @@ and message as the rest of the string. ex: \"fFile prompt\" \"sString prompt\""
        (lambda (value) (prompt-for-specs (curry callback value) (cdr prompts)))
        (car prompts))
       (funcall callback)))
+
+(defmethod mx-proxy:prompt-for-string*
+    ((impl (eql :tk)) callback &key message completion)
+  (prompt-for-string callback :message message :completion completion))

@@ -34,8 +34,10 @@
                (:module "frontend/gtk"
                 :components ((:file "package")
                              (:file "settings")
+                             (:file "commands")
                              (:file "message-pair")
                              (:file "traffic")
+                             (:file "prompt")
                              (:file "app"))))
   :build-operation "program-op"
   :build-pathname "bin/mx-proxy"

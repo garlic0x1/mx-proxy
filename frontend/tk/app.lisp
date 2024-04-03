@@ -31,6 +31,7 @@
 (defvar *wish-conn* nil)
 
 (defun main ()
+  (setf mx-proxy:*implementation* :tk)
   (with-nodgui (:title "Proxy")
     (setf *wish-conn* *wish*)
     (set-geometry *tk* 1000 800 0 0)

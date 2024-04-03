@@ -13,6 +13,18 @@
    :all-commands
    :define-command
 
+   ;; interface.lisp
+   :*implementation*
+   :make-completion
+   :fuzzy-match-p
+   :file-completion
+   :prompt-for-string*
+   :prompt-for-string
+   :prompt-for-file
+   :prompt-for-integer
+   :prompt-for-command
+   :prompt-for-specs
+
    ;; hooks.lisp
    :run-hook
    :register-hook
