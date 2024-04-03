@@ -23,24 +23,34 @@
                            (append (uiop:subdirectories dir)
                                    (uiop:directory-files dir))))))
 
-(defun prompt-for-string (callback &key (message "String Prompt")
-                                        (completion #'list))
+(defun prompt-for-string
+    (callback &key (message "String Prompt") (completion #'list))
   (prompt-for-string*
    *implementation*
    callback
    :message message
    :completion completion))
 
-(defun prompt-for-file (callback &key (message "File Prompt")
-                                      (completion #'file-completion))
+(defun prompt-for-yes-or-no
+    (callback &key (message "Yes or No Prompt")
+                   (completion (make-completion '("Yes" "No"))))
+  (prompt-for-string*
+   *implementation*
+   (lambda (str)
+     (funcall callback (string-equal :yes str)))
+   :message message
+   :completion completion))
+
+(defun prompt-for-file
+    (callback &key (message "File Prompt") (completion #'file-completion))
   (prompt-for-string*
    *implementation*
    callback
    :message message
    :completion completion))
 
-(defun prompt-for-integer (callback &key (message "Integer Prompt")
-                                         (completion #'list))
+(defun prompt-for-integer
+    (callback &key (message "Integer Prompt") (completion #'list))
   (prompt-for-string*
    *implementation*
    (lambda (str)
@@ -49,7 +59,8 @@
    :message message
    :completion completion))
 
-(defun prompt-for-command (callback &key (message "Command Prompt"))
+(defun prompt-for-command
+    (callback &key (message "Command Prompt"))
   (prompt-for-string*
    *implementation*
    callback
@@ -74,3 +85,18 @@
        (lambda (value) (prompt-for-specs (curry callback value) (cdr prompts)))
        (car prompts))
       (funcall callback)))
+
+(defmethod call-with-prompts ((obj command))
+  (prompt-for-specs
+   (lambda (&rest args)
+     (apply (command-symbol obj) args)
+     (run-hook :on-command obj))
+   (command-prompts obj)))
+
+(defmethod call-with-prompts ((obj string))
+  (when-let ((cmd (gethash obj *commands*)))
+    (call-with-prompts cmd)))
+
+(defmethod call-with-prompts ((obj symbol))
+  (when-let ((cmd (gethash (format nil "~(~a~)" obj) *commands*)))
+    (call-with-prompts cmd)))

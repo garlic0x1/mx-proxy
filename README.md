@@ -37,6 +37,7 @@ The proxy server uses the following hooks which you can attach functions to:
 | :on-response       | request response   |
 | :on-message-pair   | message-pair       |
 | :init              | (none)             |
+| :on-command        | command            |
 
 # Commands
 
