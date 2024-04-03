@@ -23,22 +23,22 @@
                              (:file "server")
                              (:file "config")))))
 
-(asdf:defsystem "mx-proxy/qt"
-  :defsystem-depends-on (:qtools)
-  :depends-on (:alexandria :str :qtools :qtcore :qtgui :qtools-ui-repl)
-  :components ((:module "frontend/qt"
+(asdf:defsystem "mx-proxy/gtk"
+  :depends-on (:alexandria :str :cl-gtk4 :cl-gdk4 :cl-gtk4.adw)
+  :components ((:module "frontend/gtk/widgets"
                 :components ((:file "package")
-                             (:file "utils")
-                             (:file "collapsible")
-                             (:file "inspector")
+                             (:file "widget")
+                             (:file "string-list")
+                             (:file "generic-string-list")
+                             (:file "prompt")))
+               (:module "frontend/gtk"
+                :components ((:file "package")
+                             (:file "settings")
                              (:file "message-pair")
-                             (:file "traffic")
-                             (:file "prompt")
-                             (:file "commands")
                              (:file "app"))))
-  :build-operation "qt-program-op"
-  :build-pathname "mx-proxy"
-  :entry-point "mx-proxy/qt:main")
+  :build-operation "program-op"
+  :build-pathname "bin/mx-proxy"
+  :entry-point "mx-proxy/gtk:main")
 
 (asdf:defsystem "mx-proxy/tk"
   :depends-on (:alexandria :str :nodgui)
@@ -70,3 +70,21 @@
                              (:file "render")
                              (:file "commands")
                              (:file "lem")))))
+
+;; probably not going to use this one
+(asdf:defsystem "mx-proxy/qt"
+  :defsystem-depends-on (:qtools)
+  :depends-on (:alexandria :str :qtools :qtcore :qtgui :qtools-ui-repl)
+  :components ((:module "frontend/qt"
+                :components ((:file "package")
+                             (:file "utils")
+                             (:file "collapsible")
+                             (:file "inspector")
+                             (:file "message-pair")
+                             (:file "traffic")
+                             (:file "prompt")
+                             (:file "commands")
+                             (:file "app"))))
+  :build-operation "qt-program-op"
+  :build-pathname "mx-proxy"
+  :entry-point "mx-proxy/qt:main")

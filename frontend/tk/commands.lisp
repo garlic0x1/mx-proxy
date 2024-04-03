@@ -19,7 +19,7 @@
 
 (defun execute-command ()
   (prompt-for-string
-   (lambda (str) (print str) (call-with-prompts str))
+   'call-with-prompts
    :completion (completion (mx-proxy:all-command-names))
    :message "Command"))
 
@@ -66,7 +66,5 @@
 (define-command divide-by-zero (num) ("iNumber")
   "Really important stuff."
   (prompt-for-yes-or-no
-   (lambda (value)
-     (when value
-       (with-tk-error (/ num 0))))
+   (lambda (value) (when value (with-tk-error (/ num 0))))
    :message "Are you sure?"))

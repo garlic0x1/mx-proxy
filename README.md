@@ -1,4 +1,5 @@
-An interactive web proxy.
+An interactive web proxy for debugging and testing HTTP servers.
+Automatically generates certificates to intercept and decrypt SSL messages.
 
 # Tk frontend
 
@@ -30,10 +31,12 @@ Depends on:
 # Hooks
 
 The proxy server uses the following hooks which you can attach functions to:
-- :on-request      - args: http:request
-- :on-response     - args: http:request http:response
-- :on-message-pair - args: http:message-pair
-- :init            - args: (none)
+| Hook               | Args               |
+| ------------------ | ------------------ |
+| :on-request        | request            |
+| :on-response       | request response   |
+| :on-message-pair   | message-pair       |
+| :init              | (none)             |
 
 # Commands
 

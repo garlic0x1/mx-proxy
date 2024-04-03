@@ -38,4 +38,5 @@
     (setf *main-app* (make-instance 'main-app :pack '(:fill :both :expand t)))
     (redraw-modeline)
     (mx-proxy:run-hook :init)
+    ;; (apply-theme "black.tcl" "black")
     nil))

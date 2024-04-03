@@ -1,5 +1,5 @@
 Features:
-- Qt frontend
+- Qt (or GTK?) frontend
 - dedupe frontend prompt/command logic
 - server global status variable (for modeline)
 - parse headers again on replay

@@ -31,6 +31,7 @@
 
    ;; config.lisp
    :config
+   :config-plist
    :config-home
 
    ;; utils.lisp
