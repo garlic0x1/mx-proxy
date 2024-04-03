@@ -1,6 +1,6 @@
 (in-package :mx-proxy)
 
-(defparameter *implementation* nil)
+(defparameter *interface* nil)
 (defparameter *default-completion-test* #'search)
 
 (defgeneric prompt-for-string* (implementation callback &key message completion))
@@ -26,7 +26,7 @@
 (defun prompt-for-string
     (callback &key (message "String Prompt") (completion #'list))
   (prompt-for-string*
-   *implementation*
+   *interface*
    callback
    :message message
    :completion completion))
@@ -35,7 +35,7 @@
     (callback &key (message "Yes or No Prompt")
                    (completion (make-completion '("Yes" "No"))))
   (prompt-for-string*
-   *implementation*
+   *interface*
    (lambda (str)
      (funcall callback (string-equal :yes str)))
    :message message
@@ -44,7 +44,7 @@
 (defun prompt-for-file
     (callback &key (message "File Prompt") (completion #'file-completion))
   (prompt-for-string*
-   *implementation*
+   *interface*
    callback
    :message message
    :completion completion))
@@ -52,7 +52,7 @@
 (defun prompt-for-integer
     (callback &key (message "Integer Prompt") (completion #'list))
   (prompt-for-string*
-   *implementation*
+   *interface*
    (lambda (str)
      (when-let ((num (parse-integer str)))
        (funcall callback num)))
@@ -62,8 +62,10 @@
 (defun prompt-for-command
     (callback &key (message "Command Prompt"))
   (prompt-for-string*
-   *implementation*
-   callback
+   *interface*
+   (lambda (str)
+     (when-let ((cmd (gethash str *commands*)))
+       (funcall callback cmd)))
    :message message
    :completion (make-completion (all-command-names))))
 

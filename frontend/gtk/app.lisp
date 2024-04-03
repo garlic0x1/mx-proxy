@@ -1,5 +1,7 @@
 (in-package :mx-proxy/gtk)
 
+(defparameter mx-proxy:*interface* :gtk)
+
 (defvar *top-grid* nil)
 
 (define-application (:name main :id "garlic0x1.mx-proxy.main-window")
@@ -19,7 +21,8 @@
                    (declare (ignore widget kcode))
                    (if (and (= 8 state)
                             (= (char-code #\x) kval))
-                       (prompt-and-execute-command)
+                       (mx-proxy:prompt-for-command
+                        #'mx-proxy:call-with-prompts)
                        (values gdk4:+event-propagate+))))
         (widget-add-controller w controller)))
 

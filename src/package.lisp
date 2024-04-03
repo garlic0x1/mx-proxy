@@ -14,7 +14,7 @@
    :define-command
 
    ;; interface.lisp
-   :*implementation*
+   :*interface*
    :make-completion
    :fuzzy-match-p
    :file-completion
@@ -24,6 +24,7 @@
    :prompt-for-integer
    :prompt-for-command
    :prompt-for-specs
+   :call-with-prompts
 
    ;; hooks.lisp
    :run-hook

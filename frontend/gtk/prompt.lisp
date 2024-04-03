@@ -18,5 +18,6 @@
    :message "Command prompt"
    :completion (mx-proxy::completion (mx-proxy:all-command-names))))
 
-(defmethod mx-proxy:prompt-for-string* ((impl (eql :gtk)) callback &key message completion)
+(defmethod mx-proxy:prompt-for-string*
+    ((impl (eql :gtk)) callback &key message completion)
   (prompt-for-string callback :message message :completion completion))
