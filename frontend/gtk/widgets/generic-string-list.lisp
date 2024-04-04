@@ -69,3 +69,19 @@
   (loop :for it :in list
         :for str := (funcall (display self) it)
         :do (string-list-append (internal self) str)))
+
+(defun list-insert-at (lst index value)
+  "https://stackoverflow.com/questions/4387570/in-common-lisp-how-can-i-insert-an-element-into-a-list-in-place"
+  (let ((retval nil))
+    (loop :for i :from 0 :to (- (length lst) 1)
+          :do (when (= i index)
+                (push value retval))
+              (push (nth i lst) retval))
+    (when (>= index (length lst))
+      (push value retval))
+    (nreverse retval)))
+
+(defmethod generic-string-list-insert (self index item)
+  (setf (contents self) (list-insert-at (contents self) index item))
+  (let ((str (funcall (display self) item)))
+    (string-list-splice (internal self) index 0 (list str))))

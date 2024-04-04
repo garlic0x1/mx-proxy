@@ -7,12 +7,15 @@
          (repeater (make-instance 'repeater))
          (scroll (make-scrolled-window))
          (genlist (make-instance 'generic-string-list
-                                 :on-change (lambda (val)
-                                              (swap repeater val)
-                                              (print val))
+                                 :on-change (lambda (val) (swap repeater val))
                                  :display #'display-message-pair
                                  :contents (reverse
                                             (mito:select-dao 'http:message-pair)))))
+    ;; (mx-proxy:register-hook (:on-load-project :traffic) ()
+    ;;   (generic))
+    (mx-proxy:register-hook (:on-message-pair :traffic) (mp)
+      (mx-proxy:with-ui-errors
+        (generic-string-list-insert genlist 0 mp)))
     (setf (widget-size-request scroll) '(400 200)
           (scrolled-window-child scroll) (gobject genlist)
           (paned-start-child paned) scroll

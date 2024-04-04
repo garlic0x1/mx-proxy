@@ -16,3 +16,11 @@
    :message "Theme"
    :completion (mx-proxy:make-completion '("dark" "light"))
    :validation (mx-proxy:make-completion '("dark" "light"))))
+
+(mx-proxy:define-command start-server (port) ("iPort")
+  "Start the proxy server on port."
+  (mx-proxy:with-ui-errors (mx-proxy:start-server :port port)))
+
+(mx-proxy:define-command stop-server () ()
+  "Stop the proxy server"
+  (mx-proxy:stop-server))
