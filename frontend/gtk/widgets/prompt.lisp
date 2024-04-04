@@ -29,7 +29,8 @@
     :accessor entry-widget)))
 
 (defmethod initialize-instance :after ((self prompt) &key &allow-other-keys)
-  (let* ((grid (make-grid))
+  (let* ((box (make-box :orientation +orientation-vertical+ :spacing 0))
+         (bottom (make-box :orientation +orientation-horizontal+ :spacing 0))
          (label (make-label :str (message self)))
          (string-list (make-instance 'string-list*
                                      :strings (funcall (completion self)
@@ -38,17 +39,19 @@
          (ok-button (make-button :label "Okay"))
          (cancel-button (make-button :label "Cancel")))
     (setf (entry-buffer-text (entry-buffer entry)) (value self)
+          (widget-hexpand-p entry) t
           (widget-margin-all label) 4
           (label-markup label) (format nil "<big>~a</big>" (message self))
-          (widget-size-request grid) '(0 128)
-          (gobject self) grid
+          (widget-size-request box) '(0 128)
+          (gobject self) box
           (widget-focusable-p entry) t
           (entry-widget self) entry)
-    (grid-attach grid label                0 0 4 1)
-    (grid-attach grid (gobject string-list) 0 1 4 1)
-    (grid-attach grid entry                0 2 2 1)
-    (grid-attach grid ok-button            2 2 1 1)
-    (grid-attach grid cancel-button        3 2 1 1)
+    (box-append box label)
+    (box-append box (gobject string-list))
+    (box-append bottom entry)
+    (box-append bottom ok-button)
+    (box-append bottom cancel-button)
+    (box-append box bottom)
     (connect ok-button "clicked"
              (lambda (button)
                (declare (ignore button))
