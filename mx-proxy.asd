@@ -35,6 +35,7 @@
                              (:file "prompt")))
                (:module "frontend/gtk"
                 :components ((:file "package")
+                             (:file "cffi")
                              (:file "settings")
                              (:file "commands")
                              (:file "message-pair")

@@ -9,3 +9,10 @@
 
 (mx-proxy:define-command load-project (file) ("fProject file:")
   (print file))
+
+(mx-proxy:define-command apply-theme () ()
+  (mx-proxy:prompt-for-string
+   (lambda (val) (prefer-dark-theme (string-equal val "dark")))
+   :message "Theme"
+   :completion (mx-proxy:make-completion '("dark" "light"))
+   :validation (mx-proxy:make-completion '("dark" "light"))))

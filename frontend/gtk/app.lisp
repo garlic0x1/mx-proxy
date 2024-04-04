@@ -17,6 +17,7 @@
             *top-grid* grid
             *top-window* w)
 
+
       (let ((controller (make-event-controller-key)))
         (connect controller "key-pressed"
                  (lambda (widget kval kcode state)
@@ -26,7 +27,13 @@
                        (mx-proxy:prompt-for-command
                         #'mx-proxy:call-with-prompts)
                        (values gdk4:+event-propagate+))))
-        (widget-add-controller w controller)))
+        (widget-add-controller w controller))
+
+      ;; load preferred theme on startup
+      (connect w "show"
+               (lambda (&rest rest)
+                 (declare (ignore rest))
+                 (prefer-dark-theme (string-equal :dark (mx-proxy:config :theme))))))
 
     (unless (widget-visible-p w)
       (window-present w))))

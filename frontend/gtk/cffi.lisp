@@ -1,0 +1,15 @@
+(in-package :mx-proxy/gtk)
+
+(cffi:defcfun ("g_object_set" g-object-set) :void
+  (object :pointer)
+  (property :string)
+  (value :int)
+  (terminator :pointer))
+
+(cffi:defcfun ("gtk_settings_get_default" gtk-settings-get-default) :pointer)
+
+(defun prefer-dark-theme (bool)
+  (g-object-set (gtk-settings-get-default)
+                "gtk-application-prefer-dark-theme"
+                (if bool 1 0)
+                (cffi:null-pointer)))
