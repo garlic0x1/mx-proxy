@@ -16,7 +16,7 @@
    (validation
     :initarg :validation
     :initform (constantly t)
-    :accessor validation)
+    :accessor prompt-validation)
    (completion
     :initarg :completion
     :initform (lambda (val) (list val))

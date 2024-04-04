@@ -13,6 +13,6 @@
          " | Project: "
          mx-proxy:*db-file*)))
 
-(mx-proxy:register-hook (:on-command :redraw-modeline) (command)
+(register-hook (:on-command :redraw-modeline) (command)
   (declare (ignore command))
   (redraw-modeline))

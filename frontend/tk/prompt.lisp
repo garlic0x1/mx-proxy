@@ -1,6 +1,6 @@
 (in-package :mx-proxy/tk)
 
-(defmethod mx-proxy:prompt-for-string*
+(defmethod mx-proxy/interface:prompt-for-string*
     ((interface (eql :tk)) callback &key message completion validation start)
   (let ((widget nil))
     (setf widget (make-instance 'prompt

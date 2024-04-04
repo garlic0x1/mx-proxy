@@ -22,7 +22,7 @@
                    :pack '(:fill :both :expand t)
                    :value c)))
 
-(defmethod mx-proxy:show-error-message
+(defmethod mx-proxy/interface:show-error-message
     ((interface (eql :tk)) condition &key severity)
   (declare (ignore severity))
   (tk-error condition))

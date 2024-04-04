@@ -38,6 +38,9 @@
          (ok-button (make-button :label "Okay"))
          (cancel-button (make-button :label "Cancel")))
     (setf (entry-buffer-text (entry-buffer entry)) (value self)
+          (widget-margin-all label) 4
+          (label-markup label) (format nil "<big>~a</big>" (message self))
+          (widget-size-request grid) '(0 128)
           (gobject self) grid
           (widget-focusable-p entry) t
           (entry-widget self) entry)
@@ -70,7 +73,6 @@
       (connect controller "key-pressed"
                (lambda (widget kval kcode state)
                  (declare (ignore widget kcode state))
-                 (print kval)
                  (cond ((= kval gdk4:+key-escape+)
                         (funcall (cancel-callback self)))
                        (t gdk4:+event-propagate+))))

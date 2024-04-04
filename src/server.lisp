@@ -36,9 +36,11 @@
 
 (define-command start-server (&key (host "127.0.0.1") (port 5000)) ()
   "Main function to start the backend, should be invoked from a frontend command."
-  (connect-database)
-  (http:start-server :host host :port port :handler 'connection-handler))
+  (with-ui-errors
+    (connect-database)
+    (http:start-server :host host :port port :handler 'connection-handler)))
 
 (define-command stop-server (&key force) ()
   "Also to invoke from frontend command."
-  (http:stop-server :force force))
+  (with-ui-errors
+    (http:stop-server :force force)))

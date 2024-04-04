@@ -36,7 +36,6 @@
       (setf (value *top-modeline*) (list key value))
       (setf (getf (value *top-modeline*) key) value))
   (update-modeline *top-modeline*)
-  (print (value *top-modeline*))
   value)
 
 (define-command set-modeline-value (key val) ("sKey" "sVal")
