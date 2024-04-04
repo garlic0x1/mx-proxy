@@ -3,6 +3,8 @@ Automatically generates certificates to intercept and decrypt SSL messages.
 
 # GTK frontend
 
+This is the best looking frontend, but still has some missing features.
+
 Depends on:
 - SBCL + Ultralisp
 - [FiloSottile/mkcert](https://github.com/FiloSottile/mkcert)
@@ -16,6 +18,8 @@ make gtk
 ![GTK](screenshots/gtk-frontend.png)　
 
 # Tk frontend
+
+This is the most complete frontend, but I am mostly working on GTK now.
 
 Depends on:
 - SBCL + Quicklisp
