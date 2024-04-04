@@ -25,7 +25,7 @@
                (let* ((req (http:message-pair-request (value self)))
                       (edited (text-buffer-text (req-buf message-pair)))
                       (host (http:request-host req)))
-                 (mx-proxy:with-ui-errors
+                 (with-ui-errors
                    (multiple-value-bind (resp pair)
                        (mx-proxy:replay req edited :ssl host :host host)
                      (declare (ignore resp))

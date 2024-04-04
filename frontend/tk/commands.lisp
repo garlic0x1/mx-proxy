@@ -24,25 +24,3 @@
                 (mapcar (lambda (sym) (format nil "~(~s~)" sym))
                         (mx-proxy:package-symbols :mx-proxy)))
    :message "Apropos function"))
-
-(define-command start-server (port) ("iPort")
-  "Start the proxy server on port."
-  (mx-proxy:with-ui-errors (mx-proxy:start-server :port port)))
-
-(define-command stop-server () ()
-  "Stop the proxy server"
-  (mx-proxy:stop-server))
-
-(define-command load-project (path) ("fSelect file")
-  "Pick a SQLite file to work with."
-  (mito:disconnect-toplevel)
-  (mx-proxy:with-ui-errors (mx-proxy:connect-database :file path))
-  (mx-proxy:run-hook :on-load-project))
-
-(define-command save-project (path) ("fSave path")
-  "Copy current project database to file."
-  (uiop:copy-file mx-proxy:*db-file* path))
-
-(define-command divide-by-zero (num sure) ("iNumber" "bAre you sure?")
-  "Really important stuff."
-  (when sure (mx-proxy:with-ui-errors (/ num 0))))

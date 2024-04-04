@@ -11,11 +11,16 @@
                                  :display #'display-message-pair
                                  :contents (reverse
                                             (mito:select-dao 'http:message-pair)))))
-    ;; (mx-proxy:register-hook (:on-load-project :traffic) ()
-    ;;   (generic))
-    (mx-proxy:register-hook (:on-message-pair :traffic) (mp)
-      (mx-proxy:with-ui-errors
-        (generic-string-list-insert genlist 0 mp)))
+    (register-hook (:on-load-project :traffic) ()
+      (idle-add
+       (lambda ()
+         (generic-string-list-clear genlist)
+         (generic-string-list-append
+          genlist
+          (reverse (mito:select-dao 'http:message-pair)) ))))
+    (register-hook (:on-message-pair :traffic) (mp)
+      (with-ui-errors
+        (idle-add (lambda () (generic-string-list-insert genlist 0 mp)))))
     (setf (widget-size-request scroll) '(400 200)
           (scrolled-window-child scroll) (gobject genlist)
           (paned-start-child paned) scroll

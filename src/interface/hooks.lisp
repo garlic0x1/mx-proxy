@@ -1,4 +1,4 @@
-(in-package :mx-proxy)
+(in-package :mx-proxy/interface)
 
 (defvar *hooks* (make-hash-table)
   "Global hook table, use `register-hook` to modify it.")

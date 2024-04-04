@@ -13,16 +13,19 @@
                              (:file "write")
                              (:file "server")
                              (:file "client")))
+               (:module "src/interface"
+                :components ((:file "package")
+                             (:file "hooks")
+                             (:file "commands")
+                             (:file "interface")))
                (:module "src"
                 :components ((:file "package")
                              (:file "utils")
-                             (:file "hooks")
-                             (:file "commands")
                              (:file "database")
                              (:file "ssl")
                              (:file "server")
                              (:file "config")
-                             (:file "interface")))))
+                             (:file "commands")))))
 
 (asdf:defsystem "mx-proxy/gtk"
   :depends-on (:alexandria :str :cl-gtk4 :cl-gdk4 :cl-gtk4.adw)
@@ -38,7 +41,6 @@
                              (:file "parameters")
                              (:file "cffi")
                              (:file "settings")
-                             (:file "commands")
                              (:file "message-pair")
                              (:file "repeater")
                              (:file "traffic")

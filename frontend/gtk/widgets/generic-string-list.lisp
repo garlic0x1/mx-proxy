@@ -61,7 +61,7 @@
 
 (defun generic-string-list-clear (self)
   (setf (contents self) '())
-  (loop :while (not (= 0 (string-list*-length self)))
+  (loop :while (not (= 0 (generic-string-list-length self)))
         :do (string-list-remove (internal self) 0)))
 
 (defun generic-string-list-append (self list)

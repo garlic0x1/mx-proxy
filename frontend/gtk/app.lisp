@@ -1,6 +1,6 @@
 (in-package :mx-proxy/gtk)
 
-(defparameter mx-proxy:*interface* :gtk)
+(defparameter *interface* :gtk)
 
 (defvar *top-grid* nil)
 (defvar *top-window* nil)
@@ -24,8 +24,8 @@
                    (declare (ignore widget kcode))
                    (if (and (= 8 state)
                             (= (char-code #\x) kval))
-                       (mx-proxy:prompt-for-command
-                        #'mx-proxy:call-with-prompts)
+                       (prompt-for-command
+                        #'call-with-prompts)
                        (values gdk4:+event-propagate+))))
         (widget-add-controller w controller))
 

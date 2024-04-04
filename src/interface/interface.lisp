@@ -1,4 +1,4 @@
-(in-package :mx-proxy)
+(in-package :mx-proxy/interface)
 
 (defparameter *interface* nil)
 (defparameter *default-completion-test* #'search)

@@ -14,3 +14,10 @@
                 "gtk-application-prefer-dark-theme"
                 (if bool 1 0)
                 (cffi:null-pointer)))
+
+(define-command apply-theme () ()
+  (prompt-for-string
+   (lambda (val) (prefer-dark-theme (string-equal val "dark")))
+   :message "Theme"
+   :completion (make-completion '("dark" "light"))
+   :validation (make-completion '("dark" "light"))))

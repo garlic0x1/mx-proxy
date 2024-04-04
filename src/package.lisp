@@ -1,38 +1,7 @@
 (defpackage :mx-proxy
-  (:use :cl :alexandria-2)
+  (:use :cl :alexandria-2 :mx-proxy/interface)
   (:local-nicknames (:us :usocket) (:ssl :cl+ssl))
   (:export
-   ;; commands.lisp
-   :*commands*
-   :command
-   :command-symbol
-   :command-prompts
-   :command-namestring
-   :command-docstring
-   :all-command-names
-   :all-commands
-   :define-command
-
-   ;; interface.lisp
-   :*interface*
-   :*default-completion-test*
-   :show-error-message
-   :with-ui-errors
-   :fuzzy-match-p
-   :make-completion
-   :file-completion
-   :prompt-for-string*
-   :prompt-for-string
-   :prompt-for-file
-   :prompt-for-integer
-   :prompt-for-command
-   :prompt-for-specs
-   :call-with-prompts
-
-   ;; hooks.lisp
-   :run-hook
-   :register-hook
-
    ;; database.lisp
    :*db-file*
    :connect-database

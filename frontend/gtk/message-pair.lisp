@@ -17,6 +17,7 @@
          (req-scroll (make-scrolled-window))
          (resp-scroll (make-scrolled-window)))
     (setf (gobject self) paned
+          (widget-vexpand-p paned) t
           (widget-size-request paned) '(500 400)
           (widget-margin-all req-scroll) 2
           (widget-margin-all resp-scroll) 2

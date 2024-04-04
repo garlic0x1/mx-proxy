@@ -1,6 +1,6 @@
 (in-package :mx-proxy/gtk)
 
-(defmethod mx-proxy:show-error-message
+(defmethod mx-proxy/interface:show-error-message
     ((interface (eql :gtk)) condition &key severity)
   (declare (ignore severity))
   (let ((widget))
