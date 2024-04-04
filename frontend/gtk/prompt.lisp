@@ -1,12 +1,13 @@
 (in-package :mx-proxy/gtk)
 
 (defmethod mx-proxy:prompt-for-string*
-    ((interface (eql :gtk)) callback &key message completion start)
+    ((interface (eql :gtk)) callback &key message completion validation start)
   (let ((widget))
     (setf widget
           (make-instance 'prompt
                          :message message
                          :start start
+                         :validation validation
                          :completion completion
                          :cancel-callback
                          (lambda ()

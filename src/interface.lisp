@@ -3,7 +3,9 @@
 (defparameter *interface* nil)
 (defparameter *default-completion-test* #'search)
 
-(defgeneric prompt-for-string* (interface callback &key message completion start))
+(defgeneric prompt-for-string*
+    (interface callback &key message completion validation start))
+
 (defgeneric show-error-message (interface condition &key severity))
 
 (defmacro with-ui-errors (&body body)
@@ -29,40 +31,49 @@
                                    (uiop:directory-files dir))))))
 
 (defun prompt-for-string
-    (callback &key (message "String Prompt") (completion #'list) (start ""))
+    (callback &key (message "String Prompt")
+                   (completion #'list)
+                   (validation (constantly t))
+                   (start ""))
   (prompt-for-string*
    *interface*
    callback
-   :start start
    :message message
-   :completion completion))
+   :validation validation
+   :completion completion
+   :start start))
 
 (defun prompt-for-yes-or-no
     (callback &key (message "Yes or No Prompt")
                    (completion (make-completion '("Yes" "No")))
+                   (validation (constantly t))
                    (start ""))
   (prompt-for-string*
    *interface*
    (lambda (str)
      (funcall callback (string-equal :yes str)))
    :message message
-   :start start
-   :completion completion))
+   :completion completion
+   :validation validation
+   :start start))
 
 (defun prompt-for-file
     (callback &key (message "File Prompt")
                    (completion #'file-completion)
+                   (validation (constantly t))
                    (start (namestring (user-homedir-pathname))))
   (prompt-for-string*
    *interface*
    callback
    :message message
-   :start start
-   :completion completion))
+   :validation validation
+   :completion completion
+   :start start))
 
 (defun prompt-for-integer
     (callback &key (message "Integer Prompt")
                    (completion #'list)
+                   (validation (lambda (str) (ignore-errors (parse-integer str))))
                    (start ""))
   (prompt-for-string*
    *interface*
@@ -70,12 +81,14 @@
      (when-let ((num (ignore-errors (parse-integer str))))
        (funcall callback num)))
    :message message
-   :start start
-   :completion completion))
+   :completion completion
+   :validation validation
+   :start start))
 
 (defun prompt-for-command
     (callback &key (message "Command Prompt")
                    (completion (make-completion (all-command-names)))
+                   (validation (lambda (s) (find s (all-command-names) :test 'equal)))
                    (start ""))
   (prompt-for-string*
    *interface*
@@ -83,8 +96,9 @@
      (when-let ((cmd (gethash str *commands*)))
        (funcall callback cmd)))
    :message message
-   :start start
-   :completion completion))
+   :completion completion
+   :validation validation
+   :start start))
 
 (defun prompt-for-spec (callback spec)
   (funcall

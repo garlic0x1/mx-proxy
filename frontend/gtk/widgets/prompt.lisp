@@ -13,6 +13,10 @@
     :initarg :completion
     :initform #'list
     :accessor completion)
+   (validation
+    :initarg :validation
+    :initform (constantly t)
+    :accessor validation)
    (callback
     :initarg :callback
     :initform (lambda (str) (declare (ignore str)) (warn "No callback."))
@@ -42,7 +46,8 @@
     (connect ok-button "clicked"
              (lambda (button)
                (declare (ignore button))
-               (funcall (callback self) (value self))))
+               (when (funcall (validation self) (value self))
+                 (funcall (callback self) (value self)))))
     (connect cancel-button "clicked"
              (lambda (button)
                (declare (ignore button))
@@ -60,7 +65,8 @@
                  (cond ((= kval gdk4:+key-escape+)
                         (funcall (cancel-callback self)))
                        ((= kval gdk4:+key-iso-enter+)
-                        (funcall (callback self) (value self)))
+                        (when (funcall (validation self) (value self))
+                          (funcall (callback self) (value self))))
                        (t (values gdk4:+event-propagate+)))))
       (widget-add-controller entry controller))
     (let ((controller (make-event-controller-key)))

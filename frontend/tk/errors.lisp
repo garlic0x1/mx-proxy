@@ -26,7 +26,3 @@
     ((interface (eql :tk)) condition &key severity)
   (declare (ignore severity))
   (tk-error condition))
-
-(defmacro with-tk-error (&body body)
-  `(handler-case (progn ,@body)
-     (error (c) (tk-error c))))

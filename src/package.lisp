@@ -18,8 +18,8 @@
    :*default-completion-test*
    :show-error-message
    :with-ui-errors
-   :make-completion
    :fuzzy-match-p
+   :make-completion
    :file-completion
    :prompt-for-string*
    :prompt-for-string
