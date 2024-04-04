@@ -2,6 +2,7 @@
 
 (defvar *server* nil)
 (defvar *halt* nil)
+(defvar *host* "Offline")
 
 (defun accept-connection (sock handler)
   (let ((conn (us:socket-accept sock :element-type '(unsigned-byte 8))))
@@ -17,12 +18,14 @@
 
 (defun stop-server (&key force)
   "Kill the thread if this isn't enough."
+  (setf *host* "Offline")
   (setf *halt* t)
   (when force (bt:destroy-thread *server*)))
 
 (defun start-server (&key (host "127.0.0.1")
                           (port 5000)
                           (handler (error "Must provide handler.")))
+  (setf *host* (format nil "~a:~a" host port))
   (setf *halt* nil)
   (setf *server* (bt:make-thread
                   (lambda ()

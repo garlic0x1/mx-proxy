@@ -9,6 +9,12 @@ tk: clean
 		--eval "(asdf:make :mx-proxy/tk)" \
 		--eval "(quit)"
 
+gtk: clean
+	$(LISP) --load mx-proxy.asd \
+		--eval "(ql:quickload '(:mx-proxy :mx-proxy/gtk))" \
+		--eval "(asdf:make :mx-proxy/gtk)" \
+		--eval "(quit)"
+
 qt: clean
 	$(LISP) --load mx-proxy.asd \
 		--eval "(ql:quickload '(:mx-proxy :mx-proxy/qt))" \

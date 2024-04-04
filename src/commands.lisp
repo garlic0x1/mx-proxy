@@ -1,40 +1,16 @@
 (in-package :mx-proxy)
 
-(defun completion (selection &key (test #'search))
-  (lambda (str) (remove-if-not (curry test str) selection)))
+(define-command divide-by-zero (num sure) ("iNumber" "bAre you sure?")
+  "Really important stuff."
+  (when sure (with-ui-errors (/ num 0))))
 
-(defvar *commands* (make-hash-table :test #'equal))
+(define-command load-project (path) ("fSelect file")
+  "Pick a SQLite file to work with."
+  (mito:disconnect-toplevel)
+  (with-ui-errors (mx-proxy:connect-database :file path))
+  (run-hook :on-load-project))
 
-(defclass command ()
-  ((symbol
-    :initarg :symbol
-    :initform (error "Must provide symbol.")
-    :accessor command-symbol)
-   (prompts
-    :initarg :prompts
-    :initform nil
-    :accessor command-prompts)
-   (namestring
-    :initform nil
-    :accessor command-namestring)
-   (docstring
-    :initform nil
-    :accessor command-docstring)))
 
-(defmethod initialize-instance :after ((obj command) &key &allow-other-keys)
-  (setf (command-docstring obj)  (documentation (command-symbol obj) 'function)
-        (command-namestring obj) (format nil "~(~a~)" (command-symbol obj))))
-
-(defun all-command-names ()
-  (hash-table-keys *commands*))
-
-(defun all-commands ()
-  (hash-table-values *commands*))
-
-(defmacro define-command (name lambda-list prompts &body body)
-  `(progn
-     (defun ,name ,lambda-list ,@body)
-     (setf (gethash (format nil "~(~a~)" (quote ,name)) *commands*)
-           (make-instance 'command
-                          :symbol (quote ,name)
-                          :prompts (quote ,prompts)))))
+(define-command save-project (path) ("fSave path")
+  "Copy current project database to file."
+  (uiop:copy-file *db-file* path))

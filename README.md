@@ -1,6 +1,25 @@
-An interactive web proxy.
+An interactive web proxy for debugging and testing HTTP servers.
+Automatically generates certificates to intercept and decrypt SSL messages.
+
+# GTK frontend
+
+This is the best looking frontend, but still has some missing features.
+
+Depends on:
+- SBCL + Ultralisp
+- [FiloSottile/mkcert](https://github.com/FiloSottile/mkcert)
+- SQLite
+- GTK4
+
+```bash
+make gtk
+```
+
+![GTK](screenshots/gtk-frontend.png)　
 
 # Tk frontend
+
+This is the most complete frontend, but I am mostly working on GTK now.
 
 Depends on:
 - SBCL + Quicklisp
@@ -30,10 +49,14 @@ Depends on:
 # Hooks
 
 The proxy server uses the following hooks which you can attach functions to:
-- :on-request      - args: http:request
-- :on-response     - args: http:request http:response
-- :on-message-pair - args: http:message-pair
-- :init            - args: (none)
+| Hook               | Args               |
+| ------------------ | ------------------ |
+| :on-request        | request            |
+| :on-response       | request response   |
+| :on-message-pair   | message-pair       |
+| :init              | (none)             |
+| :on-command        | command            |
+| :on-load-project   | (none)             |
 
 # Commands
 

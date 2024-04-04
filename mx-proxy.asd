@@ -3,7 +3,7 @@
   :license "MIT"
   :depends-on (:alexandria :cl-annot :str :bordeaux-threads
                :usocket :chunga :flexi-streams :chipz :cl+ssl
-               :yason :puri :mito :http)
+               :yason :puri :mito)
   :components ((:module "src/http"
                 :components ((:file "package")
                              (:file "utils")
@@ -13,32 +13,44 @@
                              (:file "write")
                              (:file "server")
                              (:file "client")))
+               (:module "src/interface"
+                :components ((:file "package")
+                             (:file "hooks")
+                             (:file "commands")
+                             (:file "interface")))
                (:module "src"
                 :components ((:file "package")
                              (:file "utils")
-                             (:file "hooks")
-                             (:file "commands")
                              (:file "database")
                              (:file "ssl")
                              (:file "server")
-                             (:file "config")))))
+                             (:file "config")
+                             (:file "commands")))))
 
-(asdf:defsystem "mx-proxy/qt"
-  :defsystem-depends-on (:qtools)
-  :depends-on (:alexandria :str :qtools :qtcore :qtgui :qtools-ui-repl)
-  :components ((:module "frontend/qt"
+(asdf:defsystem "mx-proxy/gtk"
+  :depends-on (:alexandria :str :cl-gtk4 :cl-gdk4 :cl-gtk4.adw)
+  :components ((:module "frontend/gtk/widgets"
                 :components ((:file "package")
-                             (:file "utils")
-                             (:file "collapsible")
-                             (:file "inspector")
+                             (:file "widget")
+                             (:file "string-list")
+                             (:file "generic-string-list")
+                             (:file "error-message")
+                             (:file "prompt")))
+               (:module "frontend/gtk"
+                :components ((:file "package")
+                             (:file "parameters")
+                             (:file "cffi")
+                             (:file "settings")
                              (:file "message-pair")
+                             (:file "repeater")
                              (:file "traffic")
                              (:file "prompt")
-                             (:file "commands")
+                             (:file "errors")
+                             (:file "modeline")
                              (:file "app"))))
-  :build-operation "qt-program-op"
-  :build-pathname "mx-proxy"
-  :entry-point "mx-proxy/qt:main")
+  :build-operation "program-op"
+  :build-pathname "bin/mx-proxy"
+  :entry-point "mx-proxy/gtk:main")
 
 (asdf:defsystem "mx-proxy/tk"
   :depends-on (:alexandria :str :nodgui)
@@ -70,3 +82,21 @@
                              (:file "render")
                              (:file "commands")
                              (:file "lem")))))
+
+;; probably not going to use this one
+(asdf:defsystem "mx-proxy/qt"
+  :defsystem-depends-on (:qtools)
+  :depends-on (:alexandria :str :qtools :qtcore :qtgui :qtools-ui-repl)
+  :components ((:module "frontend/qt"
+                :components ((:file "package")
+                             (:file "utils")
+                             (:file "collapsible")
+                             (:file "inspector")
+                             (:file "message-pair")
+                             (:file "traffic")
+                             (:file "prompt")
+                             (:file "commands")
+                             (:file "app"))))
+  :build-operation "qt-program-op"
+  :build-pathname "mx-proxy"
+  :entry-point "mx-proxy/qt:main")

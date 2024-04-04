@@ -1,20 +1,5 @@
 (in-package :ng-widgets)
 
-(defun fuzzy-match-p (str elt &optional ignore-case)
-  (loop :with start := 0
-        :for c :across str
-        :do (let ((pos (position c elt :start start :test (if ignore-case #'char-equal #'char=))))
-              (if pos
-                  (setf start pos)
-                  (return nil)))
-        :finally (return t)))
-
-(defun completion (selection &key (test #'fuzzy-match-p))
-  (lambda (str)
-    (remove-if-not
-     (curry test str)
-     selection)))
-
 (defwidget prompt (frame)
   ((message
     :initarg :message
@@ -28,6 +13,10 @@
     :initarg :command
     :initform nil
     :accessor prompt-command)
+   (validation
+    :initarg :validation
+    :initform (constantly t)
+    :accessor prompt-validation)
    (completion
     :initarg :completion
     :initform (lambda (val) (list val))
@@ -46,7 +35,9 @@
    (ok-button button
               :grid '(2 1 :sticky :nsew)
               :text "Ok"
-              :command (lambda () (funcall (prompt-command self) (prompt-value self)))))
+              :command (lambda ()
+                         (when (funcall (prompt-validation self) (prompt-value self))
+                           (funcall (prompt-command self) (prompt-value self))))))
 
   (if-let (msg (prompt-message self))
     (setf (text (label self)) msg)
@@ -86,7 +77,8 @@
   (bind entry "<Return>"
     (lambda (e)
       (declare (ignore e))
-      (funcall (prompt-command self) (prompt-value self))))
+      (when (funcall (prompt-validation self) (prompt-value self))
+        (funcall (prompt-command self) (prompt-value self)))))
 
   (bind entry "<Key>"
     (lambda (e)

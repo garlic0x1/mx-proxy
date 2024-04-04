@@ -1,5 +1,7 @@
 (in-package :mx-proxy/tk)
 
+(defparameter mx-proxy/interface:*interface* :tk)
+
 (defwidget main-app (frame)
   ()
   ((main-view traffic
@@ -21,11 +23,19 @@
   (let ((menubar (make-menubar)))
     (make-menubutton menubar "Command" 'execute-command)
     (let ((menu (make-menu menubar "Project")))
-      (make-menubutton menu "Load" (lambda () (call-with-prompts 'load-project)))
-      (make-menubutton menu "Save" (lambda () (call-with-prompts 'save-project))))
+      (make-menubutton menu "Load"
+                       (lambda ()
+                         (call-with-prompts 'load-project)))
+      (make-menubutton menu "Save"
+                       (lambda ()
+                         (call-with-prompts 'save-project))))
     (let ((menu (make-menu menubar "Server")))
-      (make-menubutton menu "Start" (lambda () (call-with-prompts 'start-server)))
-      (make-menubutton menu "Stop" (lambda () (call-with-prompts 'stop-server))))))
+      (make-menubutton menu "Start"
+                       (lambda ()
+                         (call-with-prompts 'start-server)))
+      (make-menubutton menu "Stop"
+                       (lambda ()
+                         (call-with-prompts 'stop-server))))))
 
 (defvar *main-app* nil)
 (defvar *wish-conn* nil)
@@ -37,5 +47,6 @@
     (mx-proxy:connect-database)
     (setf *main-app* (make-instance 'main-app :pack '(:fill :both :expand t)))
     (redraw-modeline)
-    (mx-proxy:run-hook :init)
+    (run-hook :init)
+    ;; (apply-theme "black.tcl" "black")
     nil))
