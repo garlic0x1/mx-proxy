@@ -11,10 +11,13 @@
                          :completion completion
                          :cancel-callback
                          (lambda ()
+                           (setf *in-prompt* nil)
                            (grid-remove *top-grid* (gobject widget)))
                          :callback
                          (lambda (val)
                            (funcall callback val)
+                           (setf *in-prompt* nil)
                            (grid-remove *top-grid* (gobject widget)))))
+    (setf *in-prompt* t)
     (grid-attach *top-grid* (gobject widget) 0 2 1 1)
     (gtk-widgets::prompt-grab-focus widget)))

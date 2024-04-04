@@ -5,6 +5,7 @@
 (defvar *top-grid* nil)
 (defvar *top-window* nil)
 (defvar *top-modeline* nil)
+(defvar *in-prompt* nil)
 
 (define-application (:name main :id "garlic0x1.mx-proxy.main-window")
   (define-main-window (w (make-application-window :application *application*))
@@ -30,8 +31,9 @@
                    (declare (ignore widget kcode))
                    (if (and (= 8 state)
                             (= (char-code #\x) kval))
-                       (prompt-for-command
-                        #'call-with-prompts)
+                       (unless *in-prompt*
+                         (prompt-for-command
+                          #'call-with-prompts))
                        (values gdk4:+event-propagate+))))
         (widget-add-controller w controller))
 
