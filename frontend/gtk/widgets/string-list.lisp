@@ -1,10 +1,7 @@
 (in-package :gtk-widgets)
 
 (defclass string-list* (widget)
-  ((widget
-    :initform nil
-    :accessor widget)
-   (internal
+  ((internal
     :initform nil
     :accessor internal)
    (strings
@@ -24,9 +21,7 @@
                (let ((label (make-label :str "")))
                  (setf (list-item-child item) label
                        (widget-halign label) +align-start+)
-                 label)
-               ;; (setf (list-item-child item) (make-label :str ""))
-               ))
+                 label)))
     (connect factory "bind"
              (lambda (factory item)
                (declare (ignore factory))

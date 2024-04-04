@@ -21,4 +21,7 @@
    :prompt
    ;; error-message.lisp
    :error-message
+   ;; modeline.lisp
+   :modeline
+   :update-modeline
    ))

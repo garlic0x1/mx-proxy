@@ -7,6 +7,7 @@
    :message "Command"))
 
 ;; user interaction stuff
+;; TODO move to src/commands.lisp once gtk implements alert message
 
 (define-command apropos-command (str) ("cApropos Command")
   "Get info about a command."

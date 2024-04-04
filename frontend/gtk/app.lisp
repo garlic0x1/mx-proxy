@@ -4,19 +4,23 @@
 
 (defvar *top-grid* nil)
 (defvar *top-window* nil)
+(defvar *top-modeline* nil)
 
 (define-application (:name main :id "garlic0x1.mx-proxy.main-window")
   (define-main-window (w (make-application-window :application *application*))
     (mx-proxy:connect-database)
     (let* ((grid (make-grid))
+           (modeline (make-instance 'modeline
+                                    :value `(:project ,mx-proxy:*db-file*)))
            (traffic (make-instance 'traffic)))
 
       (grid-attach grid (gobject traffic) 0 0 1 1)
+      (grid-attach grid (gobject modeline) 0 3 1 1)
 
       (setf (window-child w) grid
+            *top-modeline* modeline
             *top-grid* grid
             *top-window* w)
-
 
       (let ((controller (make-event-controller-key)))
         (connect controller "key-pressed"

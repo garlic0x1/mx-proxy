@@ -46,6 +46,7 @@
                              (:file "traffic")
                              (:file "prompt")
                              (:file "errors")
+                             (:file "modeline")
                              (:file "app"))))
   :build-operation "program-op"
   :build-pathname "bin/mx-proxy"

@@ -30,8 +30,7 @@
              (lambda (obj index)
                (declare (ignore obj))
                (funcall (on-change self)
-                        (nth index (contents self)))
-               (print index)))
+                        (nth index (contents self)))))
 
     (connect factory "setup"
              (lambda (factory item)
