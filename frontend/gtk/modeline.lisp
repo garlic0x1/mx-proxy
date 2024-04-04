@@ -27,6 +27,7 @@
   (loop :for (k v) :on (value self) :by #'cddr
         :for widget
            := (make-label :str (format nil "~a: ~a" (string-capitalize k) v))
+        :do (setf (widget-margin-end widget) 8)
         :do (push widget (widgets self))
         :do (box-append (container self) widget)))
 
@@ -41,3 +42,8 @@
 (define-command set-modeline-value (key val) ("sKey" "sVal")
   (let ((key (http::make-keyword* key)))
     (setf (modeline key) val)))
+
+(register-hook (:on-command :modeline) (cmd)
+  (declare (ignore cmd))
+  (setf (modeline :project) mx-proxy:*db-file*
+        (modeline :server) http:*host*))

@@ -44,6 +44,6 @@
     (let ((conn (us:socket-connect host port :element-type '(unsigned-byte 8))))
       (with-ssl-client-stream (stream conn host)
         (if raw
-            (http/write:write-raw-message stream req)
-            (http/write:write-request stream req))
-        (http/read:read-response stream)))))
+            (http:write-raw-message stream req)
+            (http:write-request stream req))
+        (http:read-response stream)))))

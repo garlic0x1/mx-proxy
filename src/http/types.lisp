@@ -13,8 +13,8 @@
     :initarg :headers
     :initform '()
     :accessor message-headers
-    :inflate #'http/util:inflate-alist
-    :deflate #'http/util:deflate-alist)
+    :inflate #'inflate-alist
+    :deflate #'deflate-alist)
    (body
     :col-type (or :null :text)
     :initarg :body
@@ -33,8 +33,8 @@
     :initarg :uri
     :initform "/"
     :accessor request-uri
-    :inflate #'http/util:inflate-uri
-    :deflate #'http/util:deflate-uri)
+    :inflate #'inflate-uri
+    :deflate #'deflate-uri)
    (protocol
     :col-type (:varchar 32)
     :initarg :protocol
@@ -71,8 +71,8 @@
     :initarg :metadata
     :initform nil
     :accessor message-pair-metadata
-    :inflate #'http/util:inflate-alist
-    :deflate #'http/util:deflate-alist)
+    :inflate #'inflate-alist
+    :deflate #'deflate-alist)
    (request
     :col-type request
     :initarg :request

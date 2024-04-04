@@ -10,8 +10,7 @@
   (define-main-window (w (make-application-window :application *application*))
     (mx-proxy:connect-database)
     (let* ((grid (make-grid))
-           (modeline (make-instance 'modeline
-                                    :value `(:project ,mx-proxy:*db-file*)))
+           (modeline (make-instance 'modeline))
            (traffic (make-instance 'traffic)))
 
       (grid-attach grid (gobject traffic) 0 0 1 1)
@@ -21,6 +20,9 @@
             *top-modeline* modeline
             *top-grid* grid
             *top-window* w)
+
+      (setf (modeline :project) mx-proxy:*db-file*
+            (modeline :server) http:*host*)
 
       (let ((controller (make-event-controller-key)))
         (connect controller "key-pressed"

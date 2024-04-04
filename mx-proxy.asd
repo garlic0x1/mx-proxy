@@ -3,7 +3,7 @@
   :license "MIT"
   :depends-on (:alexandria :cl-annot :str :bordeaux-threads
                :usocket :chunga :flexi-streams :chipz :cl+ssl
-               :yason :puri :mito :http)
+               :yason :puri :mito)
   :components ((:module "src/http"
                 :components ((:file "package")
                              (:file "utils")
