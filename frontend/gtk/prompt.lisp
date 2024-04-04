@@ -16,4 +16,5 @@
                          (lambda (val)
                            (funcall callback val)
                            (grid-remove *top-grid* (gobject widget)))))
-    (grid-attach *top-grid* (gobject widget) 0 2 1 1)))
+    (grid-attach *top-grid* (gobject widget) 0 2 1 1)
+    (gtk-widgets::prompt-grab-focus widget)))

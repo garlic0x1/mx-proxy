@@ -9,6 +9,7 @@
 (cffi:defcfun ("gtk_settings_get_default" gtk-settings-get-default) :pointer)
 
 (defun prefer-dark-theme (bool)
+  (setf (mx-proxy:config :theme) (if bool "dark" "light"))
   (g-object-set (gtk-settings-get-default)
                 "gtk-application-prefer-dark-theme"
                 (if bool 1 0)
