@@ -4,11 +4,11 @@
 
 (defmethod initialize-instance :after ((self traffic) &key &allow-other-keys)
   (let* ((paned (make-paned :orientation +orientation-horizontal+))
-         (message-pair (make-instance 'message-pair))
+         (repeater (make-instance 'repeater))
          (scroll (make-scrolled-window))
          (genlist (make-instance 'generic-string-list
                                  :on-change (lambda (val)
-                                              (swap message-pair val)
+                                              (swap repeater val)
                                               (print val))
                                  :display #'display-message-pair
                                  :contents (reverse
@@ -16,7 +16,7 @@
     (setf (widget-size-request scroll) '(400 200)
           (scrolled-window-child scroll) (gobject genlist)
           (paned-start-child paned) scroll
-          (paned-end-child paned) (gobject message-pair)
+          (paned-end-child paned) (gobject repeater)
           (gobject self) paned)))
 
 (defun display-message-pair (item)

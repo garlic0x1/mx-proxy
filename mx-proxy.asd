@@ -35,10 +35,12 @@
                              (:file "prompt")))
                (:module "frontend/gtk"
                 :components ((:file "package")
+                             (:file "parameters")
                              (:file "cffi")
                              (:file "settings")
                              (:file "commands")
                              (:file "message-pair")
+                             (:file "repeater")
                              (:file "traffic")
                              (:file "prompt")
                              (:file "errors")
