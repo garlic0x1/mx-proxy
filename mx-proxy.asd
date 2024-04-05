@@ -15,9 +15,11 @@
                              (:file "client")))
                (:module "src/interface"
                 :components ((:file "package")
+                             (:file "interface")
                              (:file "hooks")
                              (:file "commands")
-                             (:file "interface")))
+                             (:file "prompts")
+                             (:file "utils")))
                (:module "src"
                 :components ((:file "package")
                              (:file "utils")
