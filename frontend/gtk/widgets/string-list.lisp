@@ -7,11 +7,14 @@
    (strings
     :initarg :strings
     :initform nil
-    :accessor strings)))
+    :accessor strings)
+   (scroll-p
+    :initarg :scroll-p
+    :initform t
+    :accessor scroll-p)))
 
 (defmethod initialize-instance :after ((self string-list*) &key &allow-other-keys)
-  (let* ((scroll      (make-scrolled-window))
-         (string-list (make-string-list :strings (strings self)))
+  (let* ((string-list (make-string-list :strings (strings self)))
          (selection   (make-single-selection :model string-list))
          (factory     (make-signal-list-item-factory))
          (list-view   (make-list-view :model selection :factory factory)))
@@ -29,11 +32,17 @@
                      (string-object-string (gobj:coerce
                                             (list-item-item item)
                                             'string-object)))))
-    (setf (internal self) string-list
-          (scrolled-window-child scroll) list-view
-          (widget-hexpand-p scroll) t
-          (widget-vexpand-p scroll) t
-          (gobject self) scroll)))
+    (if (scroll-p self)
+        (let ((scroll (make-scrolled-window)))
+          (setf (internal self) string-list
+                (scrolled-window-child scroll) list-view
+                (widget-hexpand-p scroll) t
+                (widget-vexpand-p scroll) t
+                (gobject self) scroll))
+        (setf (internal self) string-list
+              (widget-hexpand-p list-view) t
+              (widget-vexpand-p list-view) t
+              (gobject self) list-view))))
 
 (defmethod string-list*-length ((self string-list*))
   (gio:list-model-n-items (internal self)))

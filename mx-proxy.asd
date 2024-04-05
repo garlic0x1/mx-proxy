@@ -46,6 +46,7 @@
                              (:file "message-pair")
                              (:file "repeater")
                              (:file "traffic")
+                             (:file "traffic-list")
                              (:file "prompt")
                              (:file "errors")
                              (:file "modeline")
@@ -86,19 +87,19 @@
                              (:file "lem")))))
 
 ;; probably not going to use this one
-(asdf:defsystem "mx-proxy/qt"
-  :defsystem-depends-on (:qtools)
-  :depends-on (:alexandria :str :qtools :qtcore :qtgui :qtools-ui-repl)
-  :components ((:module "frontend/qt"
-                :components ((:file "package")
-                             (:file "utils")
-                             (:file "collapsible")
-                             (:file "inspector")
-                             (:file "message-pair")
-                             (:file "traffic")
-                             (:file "prompt")
-                             (:file "commands")
-                             (:file "app"))))
-  :build-operation "qt-program-op"
-  :build-pathname "mx-proxy"
-  :entry-point "mx-proxy/qt:main")
+;; (asdf:defsystem "mx-proxy/qt"
+;;   :defsystem-depends-on (:qtools)
+;;   :depends-on (:alexandria :str :qtools :qtcore :qtgui :qtools-ui-repl)
+;;   :components ((:module "frontend/qt"
+;;                 :components ((:file "package")
+;;                              (:file "utils")
+;;                              (:file "collapsible")
+;;                              (:file "inspector")
+;;                              (:file "message-pair")
+;;                              (:file "traffic")
+;;                              (:file "prompt")
+;;                              (:file "commands")
+;;                              (:file "app"))))
+;;   :build-operation "qt-program-op"
+;;   :build-pathname "mx-proxy"
+;;   :entry-point "mx-proxy/qt:main")
