@@ -9,8 +9,7 @@
 
 (define-application (:name test-widget :id "garlic0x1.mx-proxy.test-window")
   (define-main-window (w (make-application-window :application *application*))
-    (let* ((string-table (make-instance 'traffic-list)))
-      (traffic-list-append string-table (mito:select-dao 'http:message-pair))
+    (let* ((string-table (make-instance 'traffic-list :contents (mito:select-dao 'http:message-pair))))
       (setf (window-child w) (gobject string-table)))
     (unless (widget-visible-p w)
       (window-present w))))

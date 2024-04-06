@@ -8,10 +8,20 @@
     :initarg :strings
     :initform nil
     :accessor strings)
+   (selection
+    :accessor selection)
    (scroll-p
     :initarg :scroll-p
     :initform t
-    :accessor scroll-p)))
+    :accessor scroll-p)
+   (separator-p
+    :initarg :separator-p
+    :initform nil
+    :accessor separator-p)
+   (single-click-p
+    :initarg :single-click-p
+    :initform nil
+    :accessor single-click-p)))
 
 (defmethod initialize-instance :after ((self string-list*) &key &allow-other-keys)
   (let* ((string-list (make-string-list :strings (strings self)))
@@ -32,6 +42,8 @@
                      (string-object-string (gobj:coerce
                                             (list-item-item item)
                                             'string-object)))))
+    (setf (list-view-show-separators-p list-view) (separator-p self)
+          (list-view-single-click-activate-p list-view) (single-click-p self))
     (if (scroll-p self)
         (let ((scroll (make-scrolled-window)))
           (setf (internal self) string-list
@@ -42,6 +54,7 @@
         (setf (internal self) string-list
               (widget-hexpand-p list-view) t
               (widget-vexpand-p list-view) t
+              (selection self) selection
               (gobject self) list-view))))
 
 (defmethod string-list*-length ((self string-list*))
@@ -60,3 +73,6 @@
 
 (defmethod string-list*-insert (self index item)
   (string-list-splice (internal self) index 0 (list item)))
+
+(defmethod string-list*-set-index (self index)
+  (setf (single-selection-selected (selection self)) index))

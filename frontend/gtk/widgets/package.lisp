@@ -11,6 +11,7 @@
    :string-list*-append
    :string-list*-get-string
    :string-list*-insert
+   :string-list*-set-index
    ;; generic-string-list.lisp
    :generic-string-list
    :generic-string-list-clear
