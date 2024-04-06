@@ -51,9 +51,10 @@
                        (lambda (factory item)
                          (declare (ignore factory))
                          (let ((label (gtk:make-label :str "")))
-                           (setf
-                            (widget-halign label) +align-start+
-                            (gtk:list-item-child item) label))))
+                           (setf (widget-halign label) +align-start+
+                                 (widget-hexpand-p label) t
+                                 (label-wrap-p label) t
+                                 (gtk:list-item-child item) label))))
           :do (connect factory "bind"
                        (let ((i index))
                          (lambda (factory item)
@@ -71,10 +72,10 @@
                (funcall (callback self) (traffic-list-get-message-pair self index))))
     (setf (gobject self) scroll
           (scrolled-window-child scroll) column-view
-          (widget-vexpand-p column-view) t
-          (widget-hexpand-p column-view) t
           (column-view-single-click-activate-p column-view) t
           (traffic-list-store self) store
+          ;; (widget-vexpand-p column-view) t
+          ;; (widget-hexpand-p column-view) t
           ;; (widget-vexpand-p scroll) t
           ;; (widget-hexpand-p scroll) t
           )))
@@ -82,12 +83,19 @@
 (defmethod traffic-list-length ((self traffic-list))
   (gio:list-model-n-items (traffic-list-store self)))
 
-(defmethod traffic-list-insert ((self traffic-list) index message-pair)
+(defmethod traffic-list-push ((self traffic-list) message-pair)
+  (setf (contents self) (cons message-pair (contents self)))
   (let ((row (message-pair-row message-pair)))
-    (gio:list-store-insert (traffic-list-store self) index row)))
+    (gio:list-store-insert (traffic-list-store self) 0 row)))
 
 (defmethod traffic-list-clear ((self traffic-list))
   (gio:list-store-remove-all (traffic-list-store self)))
 
 (defmethod traffic-list-get-message-pair ((self traffic-list) index)
   (nth index (contents self)))
+
+(defmethod traffic-list-append ((self traffic-list) items)
+  (setf (contents self) (append (contents self) items))
+  (loop :for item :in items
+        :for row := (message-pair-row item)
+        :do (gio:list-store-append (traffic-list-store self) row)))

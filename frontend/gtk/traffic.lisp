@@ -3,34 +3,37 @@
 (defclass traffic (widget) ())
 
 (defmethod initialize-instance :after ((self traffic) &key &allow-other-keys)
-  (let* (
-         (paned (make-paned :orientation +orientation-horizontal+))
-         ;; (split (adw:make-overlay-split-view))
+  (let* ((box (make-box :orientation +orientation-horizontal+ :spacing 0))
+         ;(make-paned :orientation +orientation-horizontal+)
          (repeater (make-instance 'repeater))
          (scroll (make-scrolled-window))
-         (genlist (make-instance 'generic-string-list
-                                 :on-change (lambda (val) (swap repeater val))
-                                 :display #'display-message-pair
-                                 :contents (reverse
-                                            (mito:select-dao 'http:message-pair)))))
+         (traffic-list (make-instance
+                        'traffic-list
+                        :callback (lambda (val)
+                                    (print val)
+                                    (swap repeater val))
+                        :contents (reverse (mito:select-dao 'http:message-pair)))))
     (register-hook (:on-load-project :traffic) ()
       (idle-add
        (lambda ()
-         (generic-string-list-clear genlist)
-         (generic-string-list-append
-          genlist
-          (reverse (mito:select-dao 'http:message-pair)) ))))
+         (traffic-list-clear traffic-list)
+         (traffic-list-append
+          traffic-list
+          (reverse (mito:select-dao 'http:message-pair)))
+         )))
     (register-hook (:on-message-pair :traffic) (mp)
       (with-ui-errors
-        (idle-add (lambda () (generic-string-list-insert genlist 0 mp)))))
+        (idle-add (lambda () (traffic-list-push traffic-list mp)))))
+    (box-append box scroll)
+    (box-append box (gobject repeater))
     (setf
      (widget-size-request scroll) '(400 200)
-     (scrolled-window-child scroll) (gobject genlist)
-     ;; (adw:overlay-split-view-content split) (gobject repeater)
-     ;; (adw:overlay-split-view-sidebar split) (gobject genlist)
-     (paned-start-child paned) scroll
-     (paned-end-child paned) (gobject repeater)
-     (gobject self) paned)))
+     (scrolled-window-child scroll) (gobject traffic-list)
+     ;; (paned-start-child paned) scroll
+     ;; (paned-end-child paned) (gobject repeater)
+     (widget-hexpand-p (gobject repeater)) t
+     (widget-vexpand-p (gobject repeater)) t
+     (gobject self) box)))
 
 (defun display-message-pair (item)
   (let ((req (http:message-pair-request item))

@@ -27,6 +27,8 @@
       (grid-attach grid (gobject modeline) 0 3 1 1)
 
       (setf (window-child w) grid
+            (widget-hexpand-p grid) t
+            (widget-hexpand-p (gobject traffic)) t
             *top-modeline* modeline
             *top-grid* grid
             *top-window* w)
