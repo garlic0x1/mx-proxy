@@ -22,6 +22,11 @@
            (str:shorten 45 (format nil "~a" (http:request-url req)))
            (format nil "~a" (http:response-status-code resp))))))
 
+(defmethod initialize-instance :before ((self traffic-list) &key &allow-other-keys)
+  "Fix CFFI type nonsense"
+  (make-string-list :strings nil)
+  (values))
+
 (defmethod initialize-instance :after ((self traffic-list) &key &allow-other-keys)
   (let*
       ((scroll (make-scrolled-window))
@@ -73,6 +78,7 @@
     (setf (gobject self) scroll
           (scrolled-window-child scroll) column-view
           (column-view-single-click-activate-p column-view) t
+          (column-view-show-row-separators-p column-view) t
           (traffic-list-store self) store
           ;; (widget-vexpand-p column-view) t
           ;; (widget-hexpand-p column-view) t

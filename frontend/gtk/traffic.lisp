@@ -4,7 +4,6 @@
 
 (defmethod initialize-instance :after ((self traffic) &key &allow-other-keys)
   (let* ((box (make-box :orientation +orientation-horizontal+ :spacing 0))
-         ;(make-paned :orientation +orientation-horizontal+)
          (repeater (make-instance 'repeater))
          (scroll (make-scrolled-window))
          (traffic-list (make-instance
@@ -19,18 +18,16 @@
          (traffic-list-clear traffic-list)
          (traffic-list-append
           traffic-list
-          (reverse (mito:select-dao 'http:message-pair)))
-         )))
+          (reverse (mito:select-dao 'http:message-pair))))))
     (register-hook (:on-message-pair :traffic) (mp)
       (with-ui-errors
         (idle-add (lambda () (traffic-list-push traffic-list mp)))))
     (box-append box scroll)
+    (box-append box (make-separator :orientation +orientation-horizontal+))
     (box-append box (gobject repeater))
     (setf
      (widget-size-request scroll) '(400 200)
      (scrolled-window-child scroll) (gobject traffic-list)
-     ;; (paned-start-child paned) scroll
-     ;; (paned-end-child paned) (gobject repeater)
      (widget-hexpand-p (gobject repeater)) t
      (widget-vexpand-p (gobject repeater)) t
      (gobject self) box)))
