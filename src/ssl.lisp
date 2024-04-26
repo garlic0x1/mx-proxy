@@ -1,10 +1,12 @@
 (in-package :mx-proxy)
 
+(defparameter *cert-directory* "/tmp/mx-proxy/certs/")
+
 (defun cert-file (name)
   (namestring
    (merge-pathnames
-    (format nil "certs/~a" name)
-    (asdf:system-source-directory :mx-proxy))))
+    name
+    (ensure-directories-exist *cert-directory*))))
 
 (defun certificate (host &key create)
   "Retrieve or generate certificate and key for host."
