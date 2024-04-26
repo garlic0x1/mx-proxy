@@ -25,4 +25,7 @@
    ;; modeline.lisp
    :modeline
    :update-modeline
+   ;; repl.lisp
+   :repl
+   :repl-item
    ))

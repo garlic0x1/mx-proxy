@@ -3,6 +3,7 @@
 (defparameter *interface* :gtk)
 
 (defvar *top-grid* nil)
+(defvar *top-notebook* nil)
 (defvar *top-window* nil)
 (defvar *top-modeline* nil)
 (defvar *in-prompt* nil)
@@ -18,15 +19,21 @@
   (define-main-window (w (make-application-window :application *application*))
     (mx-proxy:connect-database)
     (let* ((grid (make-grid))
+           (notebook (make-notebook))
            (modeline (make-instance 'modeline))
-           (traffic (make-instance 'traffic)))
+           (traffic (make-instance 'traffic))
+           (repl-view (make-instance 'repl)))
 
-      (grid-attach grid (gobject traffic) 0 0 1 1)
+      (notebook-append-page notebook (gobject traffic) (make-label :str "Traffic"))
+      (notebook-append-page notebook (gobject repl-view) (make-label :str "REPL"))
+
+      (grid-attach grid notebook 0 0 1 1)
       (grid-attach grid (gobject modeline) 0 3 1 1)
 
       (setf (window-child w) grid
             (widget-hexpand-p grid) t
-            (widget-hexpand-p (gobject traffic)) t
+            (widget-hexpand-p notebook) t
+            *top-notebook* notebook
             *top-modeline* modeline
             *top-grid* grid
             *top-window* w)
@@ -53,3 +60,8 @@
 
     (unless (widget-visible-p w)
       (window-present w))))
+
+(define-command toggle-tab-pos () ()
+  (setf (notebook-tab-pos *top-notebook*)
+        (cond ((= 2 (notebook-tab-pos *top-notebook*)) 0)
+              ((= 0 (notebook-tab-pos *top-notebook*)) 2))))

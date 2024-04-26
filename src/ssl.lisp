@@ -51,6 +51,15 @@
         (http:read-response stream)))))
 
 (define-command purge-certs (sure) ("bAre you sure?")
+  "Remove all cached SSL certs from *cert-directory*."
   (when sure
     (dolist (file (uiop:directory-files (cert-file "")))
       (uiop:delete-file-if-exists file))))
+
+(define-command install-cert-authority () ()
+  "Use mkcert to set up a local certificate authority.
+You should only have to do this once, then restart your browser."
+  (uiop:run-program "mkcert -install"))
+
+(define-command uninstall-cert-authority () ()
+  (uiop:run-program "mkcert -uninstall"))

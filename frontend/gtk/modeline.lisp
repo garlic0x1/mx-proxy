@@ -38,14 +38,10 @@
   (update-modeline *top-modeline*)
   value)
 
-(define-command set-modeline-value (key val) ("sKey" "sVal")
-  (let ((key (http::make-keyword* key)))
-    (setf (modeline key) val)))
-
 (defun set-default-modeline ()
   (setf (modeline :project) mx-proxy:*db-file*
-        (modeline :host) (ignore-errors (http:server-host mx-proxy::*server*))
-        (modeline :port) (ignore-errors (http:server-port mx-proxy::*server*))))
+        (modeline :port) (ignore-errors (http:server-port mx-proxy::*server*))
+        (modeline :host) (ignore-errors (http:server-host mx-proxy::*server*))))
 
 (register-hook (:on-command :modeline) (cmd)
   (declare (ignore cmd))
