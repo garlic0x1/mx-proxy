@@ -14,9 +14,3 @@ gtk: clean
 		--eval "(ql:quickload '(:mx-proxy :mx-proxy/gtk))" \
 		--eval "(asdf:make :mx-proxy/gtk)" \
 		--eval "(quit)"
-
-qt: clean
-	$(LISP) --load mx-proxy.asd \
-		--eval "(ql:quickload '(:mx-proxy :mx-proxy/qt))" \
-		--eval "(asdf:make :mx-proxy/qt)" \
-		--eval "(quit)"

@@ -1,15 +1,16 @@
 An interactive web proxy for debugging and testing HTTP servers.
 Automatically generates certificates to intercept and decrypt SSL messages.
 
-# GTK frontend
+# Dependencies
 
-This is the best looking frontend, but still has some missing features.
-
-Depends on:
 - SBCL + Ultralisp
 - [FiloSottile/mkcert](https://github.com/FiloSottile/mkcert)
 - SQLite
-- GTK4
+- GTK4 or Tcl/Tk
+
+# GTK frontend
+
+This is the best looking frontend, but still has some missing features.
 
 ```bash
 make gtk
@@ -20,12 +21,6 @@ make gtk
 # Tk frontend
 
 This is the most complete frontend, but I am mostly working on GTK now.
-
-Depends on:
-- SBCL + Quicklisp
-- [FiloSottile/mkcert](https://github.com/FiloSottile/mkcert)
-- SQLite
-- Tk/Tcl
 
 ```bash
 make tk
