@@ -21,3 +21,12 @@
     (setf *in-prompt* t)
     (grid-attach *top-grid* (gobject widget) 0 2 1 1)
     (gtk-widgets::prompt-grab-focus widget)))
+
+(defmethod mx-proxy/interface:message* ((interface (eql :gtk)) value)
+  (string-list*-insert *top-messages* 0 (format nil "~a" value)))
+
+(define-command send-message (msg) ("sMessage")
+  (flet ((pretty-time ()
+           (multiple-value-bind (s m h) (get-decoded-time)
+             (format nil "~a:~a:~a" h m s))))
+    (mx-proxy/interface:message (format nil "~a ~a" (pretty-time) msg))))

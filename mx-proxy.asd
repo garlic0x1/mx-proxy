@@ -47,7 +47,7 @@
                              (:file "repeater")
                              (:file "traffic")
                              (:file "traffic-list")
-                             (:file "prompt")
+                             (:file "interface")
                              (:file "errors")
                              (:file "modeline")
                              (:file "app"))))

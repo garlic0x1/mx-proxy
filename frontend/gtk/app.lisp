@@ -6,6 +6,7 @@
 (defvar *top-notebook* nil)
 (defvar *top-window* nil)
 (defvar *top-modeline* nil)
+(defvar *top-messages* nil)
 (defvar *in-prompt* nil)
 
 (define-application (:name test-widget :id "garlic0x1.mx-proxy.test-window")
@@ -21,11 +22,19 @@
     (let* ((grid (make-grid))
            (notebook (make-notebook))
            (modeline (make-instance 'modeline))
-           (traffic (make-instance 'traffic))
-           (repl-view (make-instance 'repl)))
+           (traffic-view (make-instance 'traffic))
+           (repl-view (make-instance 'repl))
+           (messages-view (make-instance 'string-list* :spearator-p t)))
 
-      (notebook-append-page notebook (gobject traffic) (make-label :str "Traffic"))
-      (notebook-append-page notebook (gobject repl-view) (make-label :str "REPL"))
+      (notebook-append-page notebook
+                            (gobject traffic-view)
+                            (make-label :str "Traffic"))
+      (notebook-append-page notebook
+                            (gobject repl-view)
+                            (make-label :str "REPL"))
+      (notebook-append-page notebook
+                            (gobject messages-view)
+                            (make-label :str "Messages"))
 
       (grid-attach grid notebook 0 0 1 1)
       (grid-attach grid (gobject modeline) 0 3 1 1)
@@ -35,6 +44,7 @@
             (widget-hexpand-p notebook) t
             *top-notebook* notebook
             *top-modeline* modeline
+            *top-messages* messages-view
             *top-grid* grid
             *top-window* w)
 
