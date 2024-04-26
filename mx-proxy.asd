@@ -40,7 +40,7 @@
                (:module "frontend/gtk"
                 :components ((:file "package")
                              (:file "parameters")
-                             (:file "cffi")
+                             (:file "styles")
                              (:file "settings")
                              (:file "message-pair")
                              (:file "repeater")

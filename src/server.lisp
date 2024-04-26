@@ -48,6 +48,9 @@
     (setf *server*
           (http:start-server :host host :port port :handler 'connection-handler))))
 
+(define-command start-default-server () ()
+  (start-server))
+
 (define-command stop-server () ()
   "Also to invoke from frontend command."
   (with-ui-errors
