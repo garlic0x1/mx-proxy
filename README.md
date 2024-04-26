@@ -3,7 +3,7 @@ Automatically generates certificates to intercept and decrypt SSL messages.
 
 # Dependencies
 
-- SBCL + Ultralisp
+- SBCL + [Ultralisp](https://ultralisp.org)
 - [FiloSottile/mkcert](https://github.com/FiloSottile/mkcert)
 - SQLite
 - GTK4 or Tcl/Tk

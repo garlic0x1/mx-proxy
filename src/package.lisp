@@ -13,6 +13,7 @@
    :replay
 
    ;; ssl.lisp
+   :*cert-directory*
    :send-request-ssl
 
    ;; config.lisp
