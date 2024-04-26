@@ -1,5 +1,7 @@
 (in-package :mx-proxy)
 
+(defvar *server* nil)
+
 (defun ssl-connection-handler (conn host)
   "Handle connections upgraded to SSL."
   (with-ssl-server-stream (stream conn (first (str:split ":" host)))
@@ -28,19 +30,26 @@
 
 (defun replay (req edited &key ssl host)
   "Replay a request using the edited text of the raw message."
-  (let* ((req (copy req :raw edited))
-         (resp (if ssl
-                   (send-request-ssl req :raw t :host host)
-                   (http:send-request req :raw t))))
-    (values resp (db-insert-pair req resp :metadata '((:replay . t))))))
+  (declare (ignore req host ssl))
+  (let ((host (http:server-host *server*))
+        (port (http:server-port *server*)))
+    (let* ((conn (us:socket-connect host port :element-type '(unsigned-byte 8)))
+           (stream (us:socket-stream conn)))
+      (unwind-protect
+           (loop :for byte :across (flexi-streams:string-to-octets edited)
+                 :do (write-byte byte stream)
+                 :finally (force-output stream))
+        (us:socket-close conn)))))
 
-(define-command start-server (&key (host "127.0.0.1") (port 5000)) ()
+(define-command start-server (&optional (host "127.0.0.1") (port 5000)) ("sHost" "iPort")
   "Main function to start the backend, should be invoked from a frontend command."
   (with-ui-errors
     (connect-database)
-    (http:start-server :host host :port port :handler 'connection-handler)))
+    (setf *server*
+          (http:start-server :host host :port port :handler 'connection-handler))))
 
-(define-command stop-server (&key force) ()
+(define-command stop-server () ()
   "Also to invoke from frontend command."
   (with-ui-errors
-    (http:stop-server :force force)))
+    (http:stop-server *server*)
+    (setf *server* nil)))

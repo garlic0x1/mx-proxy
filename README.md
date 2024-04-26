@@ -1,15 +1,16 @@
 An interactive web proxy for debugging and testing HTTP servers.
 Automatically generates certificates to intercept and decrypt SSL messages.
 
-# GTK frontend
+# Dependencies
 
-This is the best looking frontend, but still has some missing features.
-
-Depends on:
 - SBCL + Ultralisp
 - [FiloSottile/mkcert](https://github.com/FiloSottile/mkcert)
 - SQLite
-- GTK4
+- GTK4 or Tcl/Tk
+
+# GTK frontend
+
+This is the best looking frontend, but still has some missing features.
 
 ```bash
 make gtk
@@ -21,30 +22,11 @@ make gtk
 
 This is the most complete frontend, but I am mostly working on GTK now.
 
-Depends on:
-- SBCL + Quicklisp
-- [FiloSottile/mkcert](https://github.com/FiloSottile/mkcert)
-- SQLite
-- Tk/Tcl
-
 ```bash
 make tk
 ```
 
 ![Tk](screenshots/tk-frontend.png)　
-
-# Lem frontend
-
-Depends on:
-- Lem
-- [FiloSottile/mkcert](https://github.com/FiloSottile/mkcert)
-- SQLite
-
-```lisp
-(ql:quickload '(:mx-proxy :mx-proxy/lem))
-```
-
-![Lem](screenshots/lem-frontend.png)　
 
 # Hooks
 
@@ -60,9 +42,13 @@ The proxy server uses the following hooks which you can attach functions to:
 
 # Commands
 
-Use `define-command` to add interactive functionality. The `mx-proxy` namespace
-exports this macro in Tk and Qt frontends, Lem has its own implementation which
-behaves the same.
+The `mx-proxy` namespace exports a macro called `define-command` which you can
+use to add your own interactive functionality.  Example:
+
+```lisp
+(define-command divide-by-zero (num sure) ("iNumber" "bAre you sure?")
+  (when sure (with-ui-errors (/ num 0))))
+```
 
 # Configuration
 

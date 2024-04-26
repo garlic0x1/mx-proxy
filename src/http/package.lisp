@@ -1,4 +1,4 @@
-(defpackage :http
+(uiop:define-package :http
   (:use :cl :alexandria-2)
   (:local-nicknames (:us :usocket))
   (:import-from :cl-annot.class :export-class)
@@ -11,7 +11,9 @@
    :write-request
    :write-response
    ;; server.lisp
-   :*host*
+   :server-thread
+   :server-host
+   :server-port
    :start-server
    :stop-server
    ;; client.lisp

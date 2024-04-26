@@ -65,8 +65,8 @@
              (lambda (entry)
                (setf (value self) (entry-buffer-text (entry-buffer entry)))
                (string-list*-clear string-list)
-               (string-list*-append string-list (funcall (completion self)
-                                                         (value self)))))
+               (let ((new-list (funcall (completion self) (value self))))
+                 (string-list*-append string-list new-list))))
     (connect entry "activate"
              (lambda (entry)
                (declare (ignore entry))

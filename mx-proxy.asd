@@ -15,17 +15,18 @@
                              (:file "client")))
                (:module "src/interface"
                 :components ((:file "package")
+                             (:file "interface")
                              (:file "hooks")
                              (:file "commands")
-                             (:file "interface")))
+                             (:file "prompts")
+                             (:file "utils")))
                (:module "src"
                 :components ((:file "package")
                              (:file "utils")
                              (:file "database")
                              (:file "ssl")
                              (:file "server")
-                             (:file "config")
-                             (:file "commands")))))
+                             (:file "config")))))
 
 (asdf:defsystem "mx-proxy/gtk"
   :depends-on (:alexandria :str :cl-gtk4 :cl-gdk4 :cl-gtk4.adw)
@@ -44,6 +45,7 @@
                              (:file "message-pair")
                              (:file "repeater")
                              (:file "traffic")
+                             (:file "traffic-list")
                              (:file "prompt")
                              (:file "errors")
                              (:file "modeline")
@@ -84,19 +86,19 @@
                              (:file "lem")))))
 
 ;; probably not going to use this one
-(asdf:defsystem "mx-proxy/qt"
-  :defsystem-depends-on (:qtools)
-  :depends-on (:alexandria :str :qtools :qtcore :qtgui :qtools-ui-repl)
-  :components ((:module "frontend/qt"
-                :components ((:file "package")
-                             (:file "utils")
-                             (:file "collapsible")
-                             (:file "inspector")
-                             (:file "message-pair")
-                             (:file "traffic")
-                             (:file "prompt")
-                             (:file "commands")
-                             (:file "app"))))
-  :build-operation "qt-program-op"
-  :build-pathname "mx-proxy"
-  :entry-point "mx-proxy/qt:main")
+;; (asdf:defsystem "mx-proxy/qt"
+;;   :defsystem-depends-on (:qtools)
+;;   :depends-on (:alexandria :str :qtools :qtcore :qtgui :qtools-ui-repl)
+;;   :components ((:module "frontend/qt"
+;;                 :components ((:file "package")
+;;                              (:file "utils")
+;;                              (:file "collapsible")
+;;                              (:file "inspector")
+;;                              (:file "message-pair")
+;;                              (:file "traffic")
+;;                              (:file "prompt")
+;;                              (:file "commands")
+;;                              (:file "app"))))
+;;   :build-operation "qt-program-op"
+;;   :build-pathname "mx-proxy"
+;;   :entry-point "mx-proxy/qt:main")

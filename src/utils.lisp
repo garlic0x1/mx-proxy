@@ -1,5 +1,11 @@
 (in-package :mx-proxy)
 
+(defun request-url (req)
+  "Might not be right, but it works for frontend displaying."
+  (if-let ((host (http:request-host req)))
+    (uiop:strcat "https://" host (puri:render-uri (http:request-uri req) nil))
+    (http:request-uri req)))
+
 (defun package-symbols (package)
   (let ((syms nil))
     (do-external-symbols (sym package)

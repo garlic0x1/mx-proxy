@@ -24,3 +24,14 @@
                             :response (mito:insert-dao response)))))
     (run-hook :on-message-pair mp)
     mp))
+
+(define-command load-project (path) ("fSelect file")
+  "Pick a SQLite file to work with."
+  (mito:disconnect-toplevel)
+  (with-ui-errors (mx-proxy:connect-database :file path))
+  (run-hook :on-load-project))
+
+
+(define-command save-project (path) ("fSave path")
+  "Copy current project database to file."
+  (uiop:copy-file *db-file* path))

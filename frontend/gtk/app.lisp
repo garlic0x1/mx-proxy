@@ -7,6 +7,13 @@
 (defvar *top-modeline* nil)
 (defvar *in-prompt* nil)
 
+(define-application (:name test-widget :id "garlic0x1.mx-proxy.test-window")
+  (define-main-window (w (make-application-window :application *application*))
+    (let* ((string-table (make-instance 'traffic-list :contents (mito:select-dao 'http:message-pair))))
+      (setf (window-child w) (gobject string-table)))
+    (unless (widget-visible-p w)
+      (window-present w))))
+
 (define-application (:name main :id "garlic0x1.mx-proxy.main-window")
   (define-main-window (w (make-application-window :application *application*))
     (mx-proxy:connect-database)
@@ -18,12 +25,13 @@
       (grid-attach grid (gobject modeline) 0 3 1 1)
 
       (setf (window-child w) grid
+            (widget-hexpand-p grid) t
+            (widget-hexpand-p (gobject traffic)) t
             *top-modeline* modeline
             *top-grid* grid
             *top-window* w)
 
-      (setf (modeline :project) mx-proxy:*db-file*
-            (modeline :server) http:*host*)
+      (set-default-modeline)
 
       (let ((controller (make-event-controller-key)))
         (connect controller "key-pressed"

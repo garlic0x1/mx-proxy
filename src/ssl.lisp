@@ -47,3 +47,8 @@
             (http:write-raw-message stream req)
             (http:write-request stream req))
         (http:read-response stream)))))
+
+(define-command purge-certs (sure) ("bAre you sure?")
+  (when sure
+    (dolist (file (uiop:directory-files (cert-file "")))
+      (uiop:delete-file-if-exists file))))

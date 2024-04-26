@@ -1,8 +1,11 @@
 (in-package :http)
 
-(defvar *server* nil)
-(defvar *halt* nil)
-(defvar *host* "Offline")
+(defstruct server
+  thread
+  host
+  port)
+
+(define-condition stop () ())
 
 (defun accept-connection (sock handler)
   (let ((conn (us:socket-accept sock :element-type '(unsigned-byte 8))))
@@ -13,20 +16,18 @@
 
 (defun server-loop (host port handler)
   (let ((sock (us:socket-listen host port :element-type '(unsigned-byte 8))))
-    (unwind-protect (until *halt* (accept-connection sock handler))
+    (unwind-protect (handler-case (loop (accept-connection sock handler))
+                      (stop ()))
       (us:socket-close sock))))
 
-(defun stop-server (&key force)
+(defun stop-server (server)
   "Kill the thread if this isn't enough."
-  (setf *host* "Offline")
-  (setf *halt* t)
-  (when force (bt:destroy-thread *server*)))
+  (bt:interrupt-thread (server-thread server) (lambda () (signal 'stop))))
 
 (defun start-server (&key (host "127.0.0.1")
                           (port 5000)
                           (handler (error "Must provide handler.")))
-  (setf *host* (format nil "~a:~a" host port))
-  (setf *halt* nil)
-  (setf *server* (bt:make-thread
-                  (lambda ()
-                    (server-loop host port handler)))))
+  (make-server
+   :host host
+   :port port
+   :thread (bt:make-thread (lambda () (server-loop host port handler)))))
