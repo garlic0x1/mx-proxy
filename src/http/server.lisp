@@ -17,8 +17,7 @@
 (defun server-loop (host port handler)
   (let ((sock (us:socket-listen host port :element-type '(unsigned-byte 8))))
     (unwind-protect (handler-case (loop (accept-connection sock handler))
-                      (stop () (print "interrupted")))
-      (print "exiting")
+                      (stop ()))
       (us:socket-close sock))))
 
 (defun stop-server (server)
