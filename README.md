@@ -33,19 +33,6 @@ make tk
 
 ![Tk](screenshots/tk-frontend.png)　
 
-# Lem frontend
-
-Depends on:
-- Lem
-- [FiloSottile/mkcert](https://github.com/FiloSottile/mkcert)
-- SQLite
-
-```lisp
-(ql:quickload '(:mx-proxy :mx-proxy/lem))
-```
-
-![Lem](screenshots/lem-frontend.png)　
-
 # Hooks
 
 The proxy server uses the following hooks which you can attach functions to:
@@ -60,9 +47,13 @@ The proxy server uses the following hooks which you can attach functions to:
 
 # Commands
 
-Use `define-command` to add interactive functionality. The `mx-proxy` namespace
-exports this macro in Tk and Qt frontends, Lem has its own implementation which
-behaves the same.
+The `mx-proxy` namespace exports a macro called `define-command` which you can
+use to add your own interactive functionality.  Example:
+
+```lisp
+(define-command divide-by-zero (num sure) ("iNumber" "bAre you sure?")
+  (when sure (with-ui-errors (/ num 0))))
+```
 
 # Configuration
 

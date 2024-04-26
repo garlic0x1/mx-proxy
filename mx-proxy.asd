@@ -26,8 +26,7 @@
                              (:file "database")
                              (:file "ssl")
                              (:file "server")
-                             (:file "config")
-                             (:file "commands")))))
+                             (:file "config")))))
 
 (asdf:defsystem "mx-proxy/gtk"
   :depends-on (:alexandria :str :cl-gtk4 :cl-gdk4 :cl-gtk4.adw)
