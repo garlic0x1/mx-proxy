@@ -46,12 +46,6 @@
     :initform nil
     :accessor request-host)))
 
-(defun request-url (req)
-  "Might not be right, but it works for frontend displaying."
-  (if-let ((host (request-host req)))
-    (uiop:strcat "https://" host (puri:render-uri (request-uri req) nil))
-    (request-uri req)))
-
 @export-class
 (mito:deftable response (message)
   ((protocol

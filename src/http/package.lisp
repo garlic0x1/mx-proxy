@@ -3,8 +3,6 @@
   (:local-nicknames (:us :usocket))
   (:import-from :cl-annot.class :export-class)
   (:export
-   ;; types.lisp
-   :request-url
    ;; read.lisp
    :read-request
    :read-response

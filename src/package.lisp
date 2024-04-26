@@ -7,6 +7,7 @@
    :connect-database
 
    ;; server.lisp
+   :*server*
    :start-server
    :stop-server
    :replay
@@ -20,6 +21,7 @@
    :config-home
 
    ;; utils.lisp
+   :request-url
    :message-raw*
    :package-symbols
    ))

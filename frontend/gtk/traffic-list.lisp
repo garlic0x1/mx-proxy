@@ -19,7 +19,7 @@
      :strings
      (list (format nil "~a" (mito.dao.mixin:object-id mp))
            (http:request-method req)
-           (str:shorten 45 (format nil "~a" (http:request-url req)))
+           (str:shorten 45 (format nil "~a" (mx-proxy:request-url req)))
            (format nil "~a" (http:response-status-code resp))))))
 
 (defmethod initialize-instance :before ((self traffic-list) &key &allow-other-keys)

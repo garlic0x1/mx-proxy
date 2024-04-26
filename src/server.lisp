@@ -33,8 +33,7 @@
   (declare (ignore req host ssl))
   (let ((host (http:server-host *server*))
         (port (http:server-port *server*)))
-    (let* ((conn (us:socket-connect host (parse-integer port)
-                                    :element-type '(unsigned-byte 8)))
+    (let* ((conn (us:socket-connect host port :element-type '(unsigned-byte 8)))
            (stream (us:socket-stream conn)))
       (unwind-protect
            (loop :for byte :across (flexi-streams:string-to-octets edited)
