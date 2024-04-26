@@ -11,6 +11,8 @@
 (defgeneric prompt-for-string*
     (interface callback &key message completion validation start))
 
+(defgeneric message (interface value))
+
 (defgeneric show-error-message (interface condition &key severity))
 
 (defmacro with-ui-errors (&body body)

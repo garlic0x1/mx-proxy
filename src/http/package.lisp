@@ -13,7 +13,9 @@
    :write-request
    :write-response
    ;; server.lisp
-   :*host*
+   :server-thread
+   :server-host
+   :server-port
    :start-server
    :stop-server
    ;; client.lisp

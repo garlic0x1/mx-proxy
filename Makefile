@@ -20,3 +20,10 @@ qt: clean
 		--eval "(ql:quickload '(:mx-proxy :mx-proxy/qt))" \
 		--eval "(asdf:make :mx-proxy/qt)" \
 		--eval "(quit)"
+
+embed:
+	objcopy --add-section mkcert=`which mkcert` ./bin/mx-proxy ./bin/mx-proxy.loader
+
+extract:
+	objcopy --dump-section mkcert=./bin/mkcert ./bin/mx-proxy.loader
+	objcopy --remove-section mkcert ./bin/mx-proxy.loader ./bin/mx-proxy
