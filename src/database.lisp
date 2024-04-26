@@ -1,7 +1,7 @@
 (in-package :mx-proxy)
 
 (defvar *db-file* nil
-  "Filename of the current Sqlite connection.")
+  "Filename of the current SQLite connection.")
 
 (defun migrate-database (&key recreate ensure)
   (loop :for table :in '(http:request http:response http:message-pair)
@@ -10,7 +10,7 @@
                   (t        (mito:migrate-table table)))))
 
 (defun connect-database (&key (file "/tmp/proxy.sqlite3"))
-  "Connect to a Sqlite database. This serves as a 'project file' for proxy sessions."
+  "Connect to a SQLite database. This serves as a 'project file' for proxy sessions."
   (mito:connect-toplevel :sqlite3 :database-name file)
   (setf *db-file* file)
   (migrate-database :ensure t))
