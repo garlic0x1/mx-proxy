@@ -19,21 +19,15 @@
 
 (defmethod initialize-instance :after ((self repl-item) &key &allow-other-keys)
   (let* ((box (make-box :orientation +orientation-vertical+ :spacing 0))
-         (entry-box (make-box :orientation +orientation-horizontal+ :spacing 0))
-         (entry (make-entry))
-         (entry-button (make-button :label "Eval"))
+         (entry (make-instance 'lisp-entry))
          (output (make-label :str "")))
 
-    (box-append entry-box entry)
-    (box-append entry-box entry-button)
-    (box-append box entry-box)
+    (box-append box (gobject entry))
     (box-append box output)
 
     (flet ((repl-item-evaluate ()
              (setf (label-text output)
-                   (evaluate
-                    (entry-buffer-text
-                     (entry-buffer entry))))
+                   (evaluate (value entry)))
              (when (repl-item-last-p self)
                (box-append (repl-box (repl-item-parent self))
                            (gobject
@@ -41,21 +35,24 @@
                                            :parent (repl-item-parent self)))))
              (setf (repl-item-last-p self) nil)))
 
-      (connect entry-button "clicked"
-               (lambda (button)
-                 (declare (ignore button))
-                 (repl-item-evaluate)))
+      (setf (lisp-entry-activate entry)
+            (lambda (self) (declare (ignore self)) (repl-item-evaluate)))
 
-      (connect entry "activate"
-               (lambda (entry)
-                 (declare (ignore entry))
-                 (repl-item-evaluate))))
+      ;; (connect entry-button "clicked"
+      ;;          (lambda (button)
+      ;;            (declare (ignore button))
+      ;;            (repl-item-evaluate)))
+
+      ;; (connect (lisp-entry-entry entry) "activate"
+      ;;          (lambda (entry)
+      ;;            (declare (ignore entry))
+      ;;            (repl-item-evaluate)))
+      )
 
     (setf (gobject self) box
           (widget-halign output) +align-start+
           (widget-hexpand-p (gobject self)) t
-          (widget-hexpand-p entry-box) t
-          (widget-hexpand-p entry) t
+          (widget-hexpand-p (gobject entry)) t
           (widget-hexpand-p box) t
           (widget-margin-all output) 8
           (widget-hexpand-p output) t)))

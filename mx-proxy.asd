@@ -29,13 +29,14 @@
                              (:file "config")))))
 
 (asdf:defsystem "mx-proxy/gtk"
-  :depends-on (:alexandria :str :cl-gtk4 :cl-gdk4 :cl-gtk4.adw)
+  :depends-on (:alexandria :str :cl-gtk4 :cl-gdk4 :cl-gtk4.adw :micros)
   :components ((:module "frontend/gtk/widgets"
                 :components ((:file "package")
                              (:file "widget")
                              (:file "string-list")
                              (:file "generic-string-list")
                              (:file "error-message")
+                             (:file "lisp-entry")
                              (:file "repl")
                              (:file "prompt")))
                (:module "frontend/gtk"

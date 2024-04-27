@@ -53,13 +53,16 @@
       (let ((controller (make-event-controller-key)))
         (connect controller "key-pressed"
                  (lambda (widget kval kcode state)
-                   (declare (ignore widget kcode))
-                   (if (and (= 8 state)
-                            (= (char-code #\x) kval))
-                       (unless *in-prompt*
-                         (prompt-for-command
-                          #'call-with-prompts))
-                       (values gdk4:+event-propagate+))))
+                   (declare (ignore widget))
+                   (format t "state: ~a, kval: ~a, kcode: ~a~%" state kval kcode)
+                   (cond ((and (= 8 state) (= (char-code #\x) kval))
+                          (unless *in-prompt*
+                            (prompt-for-command #'call-with-prompts)))
+                         ((and (= 8 state) (or (= 116 kcode) (= 114 kcode)))
+                          (notebook-next-page *top-notebook*))
+                         ((and (= 8 state) (or (= 111 kcode) (= 113 kcode)))
+                          (notebook-prev-page *top-notebook*))
+                         (t (values gdk4:+event-propagate+)))))
         (widget-add-controller w controller))
 
       ;; load preferred theme on startup
