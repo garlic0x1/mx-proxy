@@ -21,13 +21,21 @@
    (single-click-p
     :initarg :single-click-p
     :initform nil
-    :accessor single-click-p)))
+    :accessor single-click-p)
+   (on-change
+    :initarg :on-change
+    :initform (lambda (i str) (declare (ignore i str)) (warn "No handler."))
+    :accessor on-change)))
 
 (defmethod initialize-instance :after ((self string-list*) &key &allow-other-keys)
   (let* ((string-list (make-string-list :strings (strings self)))
          (selection   (make-single-selection :model string-list))
          (factory     (make-signal-list-item-factory))
          (list-view   (make-list-view :model selection :factory factory)))
+    (connect list-view "activate"
+             (lambda (obj index)
+               (declare (ignore obj))
+               (funcall (on-change self) index (string-list*-get-string self index))))
     (connect factory "setup"
              (lambda (factory item)
                (declare (ignore factory))

@@ -54,7 +54,7 @@
         (connect controller "key-pressed"
                  (lambda (widget kval kcode state)
                    (declare (ignore widget))
-                   (format t "state: ~a, kval: ~a, kcode: ~a~%" state kval kcode)
+                   ;; (format t "state: ~a, kval: ~a, kcode: ~a~%" state kval kcode)
                    (cond ((and (= 8 state) (= (char-code #\x) kval))
                           (unless *in-prompt*
                             (prompt-for-command #'call-with-prompts)))
