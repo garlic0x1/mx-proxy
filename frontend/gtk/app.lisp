@@ -7,6 +7,7 @@
 (defvar *top-window* nil)
 (defvar *top-modeline* nil)
 (defvar *top-messages* nil)
+(defvar *top-repl* nil)
 (defvar *in-prompt* nil)
 
 (define-application (:name test-widget :id "garlic0x1.mx-proxy.test-window")
@@ -45,6 +46,7 @@
             *top-notebook* notebook
             *top-modeline* modeline
             *top-messages* messages-view
+            *top-repl* repl-view
             *top-grid* grid
             *top-window* w)
 
@@ -78,3 +80,6 @@
   (setf (notebook-tab-pos *top-notebook*)
         (cond ((= 2 (notebook-tab-pos *top-notebook*)) 0)
               ((= 0 (notebook-tab-pos *top-notebook*)) 2))))
+
+(define-command clear-repl () ()
+  (gtk-widgets::repl-clear *top-repl*))

@@ -50,7 +50,7 @@
             (http:write-request stream req))
         (http:read-response stream)))))
 
-(define-command purge-certs (&optional sure) ("bAre you sure?")
+(define-command purge-certs (&optional (sure t)) ("bAre you sure?")
   "Remove all cached SSL certs from *cert-directory*."
   (when sure
     (dolist (file (uiop:directory-files (cert-file "")))
