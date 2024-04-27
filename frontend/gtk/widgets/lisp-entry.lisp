@@ -7,6 +7,10 @@
     :accessor value)
    (entry
     :accessor lisp-entry-entry)
+   (scroll
+    :accessor lisp-entry-scroll)
+   (completions
+    :accessor lisp-entry-completions)
    (activate
     :initarg :activate
     :initform (lambda (self)
@@ -25,7 +29,7 @@
                                      :on-change
                                      (lambda (i str)
                                        (declare (ignore i))
-                                       (entry-replace-selected-token entry str)))))
+                                       (lisp-entry-replace-selected-token self str)))))
 
     (box-append entry-box entry)
     (box-append entry-box entry-button)
@@ -36,12 +40,7 @@
              (lambda (entry)
                (setf (value self) (entry-buffer-text (entry-buffer entry)))
                (try-match-paren entry)
-               (string-list*-clear completions)
-               (let ((new-cmps (entry-completions entry)))
-                 (string-list*-append completions new-cmps)
-                 (if new-cmps
-                     (widget-show scroll)
-                     (widget-hide scroll)))))
+               (lisp-entry-update-completions self)))
 
     (connect entry "activate"
              (lambda (entry)
@@ -63,8 +62,7 @@
                         (alexandria:when-let ((new (string-list-get-string
                                                     (internal completions)
                                                     0)))
-                          (entry-replace-selected-token entry new)
-                          (lisp-entry-grab-focus self)
+                          (lisp-entry-replace-selected-token self new)
                           t))
                        (t gdk4:+event-propagate+))))
       (widget-add-controller entry controller))
@@ -76,6 +74,8 @@
           (widget-hexpand-p entry-box) t
           (widget-hexpand-p entry) t
           (widget-hexpand-p box) t
+          (lisp-entry-scroll self) scroll
+          (lisp-entry-completions self) completions
           (lisp-entry-entry self) entry)))
 
 (defvar +token-separators+
@@ -88,9 +88,9 @@
           :do (setf token (format nil "~a~a" token c)))
     token))
 
-(defun entry-replace-selected-token (self string)
-  (let* ((buf (entry-buffer self))
-         (ind (editable-position self))
+(defun lisp-entry-replace-selected-token (self string)
+  (let* ((buf (entry-buffer (lisp-entry-entry self)))
+         (ind (editable-position (lisp-entry-entry self)))
          (start (subseq (entry-buffer-text buf) 0 ind))
          (rev-start (reverse start))
          (rev-str (read-token-from-string rev-start))
@@ -99,9 +99,23 @@
           (uiop:strcat
            (subseq (entry-buffer-text buf) 0 (- ind tok-len))
            string
-           (subseq (entry-buffer-text buf) ind (length (entry-buffer-text buf)))))))
+           (subseq (entry-buffer-text buf) ind (length (entry-buffer-text buf)))))
+    (lisp-entry-grab-focus self)
+    (setf (editable-position (lisp-entry-entry self)) (+ (length string) (- ind tok-len)))
+    (lisp-entry-update-completions self)
+    ))
 
-(defun entry-completions (self &key (limit 32) (package :cl-user))
+(defun simple-completions* (str &optional (package :cl-user) &key (length 128))
+  (let* ((packages
+           (mapcar (lambda (s) (format nil "~(~a~):" s))
+                   (remove-if-not
+                    (lambda (p) (str:starts-with-p str p :ignore-case t))
+                    (mapcar #'package-name (list-all-packages)))))
+         (micros (car (micros:simple-completions str package)))
+         (completions (append packages micros)))
+    (subseq completions 0 (min length (length completions)))))
+
+(defun entry-completions (self &key (limit 128) (package :cl-user))
   (handler-case
       (let* ((buf (entry-buffer self))
              (ind (editable-position self))
@@ -113,7 +127,7 @@
                    (str (reverse rev-str)))
               (if (string-equal "" str)
                   '()
-                  (let ((completions (car (micros:simple-completions str package))))
+                  (let ((completions (simple-completions* str package)))
                     (subseq completions 0 (min limit (length completions))))))))
     (error (c) (print c) nil)))
 
@@ -129,3 +143,11 @@
       (when (char= #\( (elt text (1- pos)))
         (setf (entry-buffer-text (entry-buffer entry)) (str:insert #\) pos text)
               (editable-position entry) pos)))))
+
+(defun lisp-entry-update-completions (self)
+  (string-list*-clear (lisp-entry-completions self))
+  (let ((new-cmps (entry-completions (lisp-entry-entry self))))
+    (string-list*-append (lisp-entry-completions self) new-cmps)
+    (if new-cmps
+        (widget-show (lisp-entry-scroll self))
+        (widget-hide (lisp-entry-scroll self)))))
