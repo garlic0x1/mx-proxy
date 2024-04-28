@@ -19,7 +19,10 @@
     :accessor fuzzer-wordlist)
    (wordlist-label
     :initform nil
-    :accessor wordlist-label)))
+    :accessor wordlist-label)
+   (workers
+    :initform nil
+    :accessor fuzzer-workers)))
 
 (defmethod initialize-instance :after ((self fuzzer) &key &allow-other-keys)
   (let* ((paned (make-paned :orientation +orientation-horizontal+))
@@ -27,8 +30,21 @@
          (resps-box (make-box :orientation +orientation-vertical+ :spacing 0))
          (fuzz-button (make-button :label "Fuzz"))
          (wordlist-box (make-box :orientation +orientation-horizontal+ :spacing 0))
+         (wordlist-frame (make-frame :label "Wordlist"))
          (wordlist-button (make-button :label "Select wordlist"))
          (wordlist-label (make-label :str "NIL"))
+         ;; (workers-box (make-box :orientation +orientation-horizontal+ :spacing 0))
+         (workers-frame (make-frame :label "Workers"))
+         (adjustment (make-adjustment :value 12.0d0
+                                      :lower 1.0d0
+                                      :upper 256.0d0
+                                      :step-increment 1.0d0
+                                      :page-increment 5.0d0
+                                      :page-size 0.0d0))
+         ;; (workers-label (make-label :str "Workers:"))
+         (workers-spin-button (make-spin-button :climb-rate 1.0d0
+                                                :digits 0
+                                                :adjustment adjustment))
          (req-pane (make-text-view))
          (req-scroll (make-scrolled-window))
          (resps-list (make-instance 'generic-string-list
@@ -41,10 +57,13 @@
                                                    (fuzzer-selected self))))))
          (selected (make-instance 'message-pair)))
     (box-append req-box req-scroll)
+    (box-append req-box wordlist-frame)
+    (box-append req-box workers-frame)
     (box-append req-box fuzz-button)
-    (box-append req-box wordlist-box)
-    (box-append wordlist-box wordlist-label)
+    ;; (box-append workers-box workers-label)
+    ;; (box-append workers-box workers-spin-button)
     (box-append wordlist-box wordlist-button)
+    (box-append wordlist-box wordlist-label)
     (box-append resps-box (gobject resps-list))
     (box-append resps-box (gobject selected))
     (setf (paned-start-child paned) req-box
@@ -56,7 +75,10 @@
     (connect fuzz-button "clicked"
              (lambda (button)
                (declare (ignore button))
+               (widget-hide (gobject (fuzzer-selected self)))
+               (generic-string-list-clear resps-list)
                (fuzzer-fuzz self
+                            (spin-button-value workers-spin-button)
                             (text-buffer-text (req-buf self))
                             (fuzzer-wordlist self))))
 
@@ -73,11 +95,14 @@
           (widget-size-request resps-box) '(300 0)
           (widget-hexpand-p req-box) t
           (widget-hexpand-p resps-box) t
-          (widget-hexpand-p wordlist-box) t
-          (widget-hexpand-p wordlist-button) t
+          ;; (widget-hexpand-p wordlist-box) t
+          ;; (widget-hexpand-p wordlist-button) t
+          (frame-child workers-frame) workers-spin-button
+          (frame-child wordlist-frame) wordlist-box
           (widget-vexpand-p req-scroll) t
           (widget-vexpand-p (gobject resps-list)) t
           (wordlist-label self) wordlist-label
+          (fuzzer-workers self) workers-spin-button
           (req-buf self) (text-view-buffer req-pane)
           (fuzzer-selected self) selected
           (resps-box self) resps-box
@@ -94,11 +119,12 @@
 
 (defun fuzzer-rerender (self)
   (setf (label-text (wordlist-label self)) (fuzzer-wordlist self))
-  (when (fuzzer-req self)
-    (setf (text-buffer-text (req-buf self)) (http:message-raw (fuzzer-req self)))))
+  )
 
 (defmethod swap ((self fuzzer) value)
   (setf (fuzzer-req self) value)
+  (when value
+    (setf (text-buffer-text (req-buf self)) (http:message-raw value)))
   (swap (fuzzer-selected self) nil)
   (generic-string-list-clear (fuzzer-resps self))
   (widget-hide (resps-box self))
@@ -107,12 +133,12 @@
 (defun templated-request (req edited word)
   (mx-proxy::copy req :raw (str:replace-all "~FUZZ" word edited)))
 
-(defun fuzzer-fuzz (self edited wordlist)
+(defun fuzzer-fuzz (self workers edited wordlist)
   (widget-show (resps-box self))
   (bt:make-thread
    (lambda ()
      (mx-proxy/common/concurrency:wforeach
-      12
+      workers
       (lambda (word)
         (let* ((req (templated-request (fuzzer-req self) edited word))
                (resp (http:send-request req :raw t))
