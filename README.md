@@ -20,7 +20,7 @@ make gtk
 
 # Tk frontend
 
-This is the most complete frontend, but I am mostly working on GTK now.
+NOTE: Currently unmaintained, I like GTK more.  It should still work for basic stuff.
 
 ```bash
 make tk

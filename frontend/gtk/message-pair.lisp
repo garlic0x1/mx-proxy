@@ -30,7 +30,7 @@
           (widget-vexpand-p resp-box) t
           (widget-vexpand-p req-scroll) t
           (widget-vexpand-p resp-scroll) t
-          (widget-size-request paned) '(500 400)
+          (widget-size-request paned) '(300 0)
           ;; (widget-margin-all req-scroll) 2
           ;; (widget-margin-all resp-scroll) 2
           (req-buf self) (text-view-buffer req-pane)

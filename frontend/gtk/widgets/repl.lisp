@@ -77,4 +77,5 @@
 (defun repl-clear (self)
   (dolist (child (repl-children self))
     (box-remove (repl-box self) (gobject child)))
+  (setf (repl-children self) nil)
   (repl-next self))

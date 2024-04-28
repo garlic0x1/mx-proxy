@@ -1,7 +1,5 @@
 (in-package :http)
-(cl-annot:enable-annot-syntax)
 
-@export-class
 (mito:deftable message ()
   ((raw
     :col-type :text
@@ -21,7 +19,6 @@
     :initform nil
     :accessor message-body)))
 
-@export-class
 (mito:deftable request (message)
   ((method
     :col-type (:varchar 32)
@@ -46,7 +43,6 @@
     :initform nil
     :accessor request-host)))
 
-@export-class
 (mito:deftable response (message)
   ((protocol
     :col-type (:varchar 32)
@@ -64,7 +60,6 @@
     :initform "OK"
     :accessor response-status)))
 
-@export-class
 (mito:deftable message-pair ()
   ((metadata
     :col-type (or :null :jsonb)

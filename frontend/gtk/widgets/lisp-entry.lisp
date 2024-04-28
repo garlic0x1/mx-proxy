@@ -35,6 +35,7 @@
     (box-append entry-box entry-button)
     (box-append box entry-box)
     (box-append box scroll)
+    (widget-hide scroll)
 
     (connect entry "changed"
              (lambda (entry)
@@ -58,6 +59,7 @@
       (connect controller "key-pressed"
                (lambda (widget kval kcode state)
                  (declare (ignore widget kcode state))
+                 (print "keypress")
                  (cond ((= kval gdk4:+key-tab+)
                         (alexandria:when-let ((new (string-list-get-string
                                                     (internal completions)
@@ -79,7 +81,7 @@
           (lisp-entry-entry self) entry)))
 
 (defvar +token-separators+
-  '(#\  #\tab #\newline #\( #\) #\' #\"))
+  '(#\  #\tab #\newline #\( #\) #\' #\" #\, #\@ #\\))
 
 (defun read-token-from-string (string)
   (let ((token ""))
@@ -105,15 +107,19 @@
     (lisp-entry-update-completions self)
     ))
 
-(defun simple-completions* (str &optional (package :cl-user) &key (length 128))
+(defun first-n (n seq)
+  (subseq seq 0 (min n (length seq))))
+
+(defun simple-completions* (str &key (package :cl-user) (length 128))
   (let* ((packages
            (mapcar (lambda (s) (format nil "~(~a~):" s))
-                   (remove-if-not
-                    (lambda (p) (str:starts-with-p str p :ignore-case t))
-                    (mapcar #'package-name (list-all-packages)))))
+                   (first-n length
+                            (remove-if-not
+                             (lambda (p) (str:starts-with-p str p :ignore-case t))
+                             (mapcar #'package-name  (list-all-packages))))))
          (micros (car (micros:simple-completions str package)))
          (completions (append packages micros)))
-    (subseq completions 0 (min length (length completions)))))
+    (first-n length completions)))
 
 (defun entry-completions (self &key (limit 128) (package :cl-user))
   (handler-case
@@ -127,8 +133,7 @@
                    (str (reverse rev-str)))
               (if (string-equal "" str)
                   '()
-                  (let ((completions (simple-completions* str package)))
-                    (subseq completions 0 (min limit (length completions))))))))
+                  (simple-completions* str :package package :length limit)))))
     (error (c) (print c) nil)))
 
 (defun lisp-entry-grab-focus (self)
@@ -138,9 +143,12 @@
 
 (defun try-match-paren (entry)
   (ignore-errors
-    (let ((text (entry-buffer-text (entry-buffer entry)))
-          (pos (editable-position entry)))
-      (when (char= #\( (elt text (1- pos)))
+    (let* ((text (entry-buffer-text (entry-buffer entry)))
+           (pos (editable-position entry))
+           (opens (count #\( text))
+           (closeds (count #\) text)))
+      (when (and (char= #\( (elt text (1- pos)))
+                 (> opens closeds))
         (setf (entry-buffer-text (entry-buffer entry)) (str:insert #\) pos text)
               (editable-position entry) pos)))))
 

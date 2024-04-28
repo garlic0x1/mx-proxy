@@ -1,10 +1,11 @@
 (asdf:defsystem "mx-proxy"
   :author "garlic0x1"
   :license "MIT"
-  :depends-on (:alexandria :cl-annot :str :bordeaux-threads
-               :usocket :chunga :flexi-streams :chipz :cl+ssl
-               :yason :puri :mito)
-  :components ((:module "src/http"
+  :depends-on (:alexandria :str :bordeaux-threads :usocket :chunga :flexi-streams
+               :chipz :cl+ssl :yason :puri :mito :queues.simple-cqueue)
+  :components ((:module "src/common"
+                :components ((:file "concurrency")))
+               (:module "src/http"
                 :components ((:file "package")
                              (:file "utils")
                              (:file "types")
@@ -29,7 +30,7 @@
                              (:file "config")))))
 
 (asdf:defsystem "mx-proxy/gtk"
-  :depends-on (:alexandria :str :cl-gtk4 :cl-gdk4 :cl-gtk4.adw :micros)
+  :depends-on (:alexandria :str :cl-gtk4 :cl-gdk4 :micros)
   :components ((:module "frontend/gtk/widgets"
                 :components ((:file "package")
                              (:file "widget")
@@ -48,6 +49,7 @@
                              (:file "repeater")
                              (:file "traffic")
                              (:file "traffic-list")
+                             (:file "fuzzer")
                              (:file "interface")
                              (:file "errors")
                              (:file "modeline")

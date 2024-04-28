@@ -8,6 +8,7 @@
 (defvar *top-modeline* nil)
 (defvar *top-messages* nil)
 (defvar *top-repl* nil)
+(defvar *top-fuzzer* nil)
 (defvar *in-prompt* nil)
 
 (define-application (:name test-widget :id "garlic0x1.mx-proxy.test-window")
@@ -25,11 +26,15 @@
            (modeline (make-instance 'modeline))
            (traffic-view (make-instance 'traffic))
            (repl-view (make-instance 'repl))
+           (fuzzer-view (make-instance 'fuzzer))
            (messages-view (make-instance 'string-list* :spearator-p t)))
 
       (notebook-append-page notebook
                             (gobject traffic-view)
                             (make-label :str "Traffic"))
+      (notebook-append-page notebook
+                            (gobject fuzzer-view)
+                            (make-label :str "Fuzzer"))
       (notebook-append-page notebook
                             (gobject repl-view)
                             (make-label :str "REPL"))
@@ -44,6 +49,7 @@
             (widget-hexpand-p grid) t
             (widget-hexpand-p notebook) t
             *top-notebook* notebook
+            *top-fuzzer* fuzzer-view
             *top-modeline* modeline
             *top-messages* messages-view
             *top-repl* repl-view
@@ -56,8 +62,8 @@
         (connect controller "key-pressed"
                  (lambda (widget kval kcode state)
                    (declare (ignore widget))
-                   ;; (format t "state: ~a, kval: ~a, kcode: ~a~%" state kval kcode)
                    (cond ((and (= 8 state) (= (char-code #\x) kval))
+                          (mx-proxy/interface:message "Opening M-x prompt.")
                           (unless *in-prompt*
                             (prompt-for-command #'call-with-prompts)))
                          ((and (= 8 state) (or (= 116 kcode) (= 114 kcode)))
@@ -83,3 +89,12 @@
 
 (define-command clear-repl () ()
   (gtk-widgets::repl-clear *top-repl*))
+
+
+(define-command repl-test (n) ("iNumber of items")
+  (dotimes (i n)
+    (let ((inner (make-box :orientation +orientation-vertical+ :spacing 0))
+          (label (make-label :str (format nil "~a" (list-all-packages)))))
+      (box-append inner label)
+      (box-append (gtk-widgets::repl-box *top-repl*) inner)
+      (box-remove (gtk-widgets::repl-box *top-repl*) inner))))
