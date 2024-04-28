@@ -33,7 +33,6 @@
          (wordlist-frame (make-frame :label "Wordlist"))
          (wordlist-button (make-button :label "Select wordlist"))
          (wordlist-label (make-label :str "NIL"))
-         ;; (workers-box (make-box :orientation +orientation-horizontal+ :spacing 0))
          (workers-frame (make-frame :label "Workers"))
          (adjustment (make-adjustment :value 12.0d0
                                       :lower 1.0d0
@@ -41,7 +40,6 @@
                                       :step-increment 1.0d0
                                       :page-increment 5.0d0
                                       :page-size 0.0d0))
-         ;; (workers-label (make-label :str "Workers:"))
          (workers-spin-button (make-spin-button :climb-rate 1.0d0
                                                 :digits 0
                                                 :adjustment adjustment))
@@ -60,8 +58,6 @@
     (box-append req-box wordlist-frame)
     (box-append req-box workers-frame)
     (box-append req-box fuzz-button)
-    ;; (box-append workers-box workers-label)
-    ;; (box-append workers-box workers-spin-button)
     (box-append wordlist-box wordlist-button)
     (box-append wordlist-box wordlist-label)
     (box-append resps-box (gobject resps-list))
@@ -95,8 +91,6 @@
           (widget-size-request resps-box) '(300 0)
           (widget-hexpand-p req-box) t
           (widget-hexpand-p resps-box) t
-          ;; (widget-hexpand-p wordlist-box) t
-          ;; (widget-hexpand-p wordlist-button) t
           (frame-child workers-frame) workers-spin-button
           (frame-child wordlist-frame) wordlist-box
           (widget-vexpand-p req-scroll) t
@@ -112,10 +106,11 @@
 
 (defun display-response (pair)
   (let ((resp (http:message-pair-response pair)))
-    (format nil "~a ~a ~a"
+    (format nil "~a ~a ~a | Length: ~a"
             (http:response-protocol resp)
             (http:response-status-code resp)
-            (http:response-status resp))))
+            (http:response-status resp)
+            (length (http:message-raw resp)))))
 
 (defun fuzzer-rerender (self)
   (setf (label-text (wordlist-label self)) (fuzzer-wordlist self))

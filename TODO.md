@@ -4,6 +4,7 @@
 - widgets for messages, maybe flash on modeline too (buggy rn)
 
 ## Bugs:
+- SSL replays are broken
 - server concurrency feels slow
 - chunked encoding decompression is weird
 
