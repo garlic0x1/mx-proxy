@@ -39,11 +39,8 @@
 
 (defun repeater-replay (self)
   (let* ((req (http:message-pair-request (repeater-value self)))
-         (edited (text (req (pair self))))
-         (host (http:request-host req)))
-    (multiple-value-bind (resp pair) (mx-proxy:replay req edited :ssl host :host host)
-      (declare (ignore resp))
-      (repeater-swap self pair))))
+         (edited (text (req (pair self)))))
+    (repeater-swap self (mx-proxy:replay req edited))))
 
 (defwidget message-pair-view (frame)
   ((message-pair

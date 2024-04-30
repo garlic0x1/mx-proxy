@@ -4,18 +4,24 @@
    ;; interface.lisp
    :*interface*
    :*default-completion-test*
+   :message*
+   :message
    :show-error-message
    :with-ui-errors
+   :prompt-for-string*
+
+   ;; utils
    :fuzzy-match-p
    :make-completion
    :file-completion
-   :prompt-for-string*
+   :call-with-prompts
+
+   ;; prompts.lisp
    :prompt-for-string
    :prompt-for-file
    :prompt-for-integer
    :prompt-for-command
    :prompt-for-specs
-   :call-with-prompts
 
    ;; commands.lisp
    :*commands*

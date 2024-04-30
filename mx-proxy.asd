@@ -1,10 +1,11 @@
 (asdf:defsystem "mx-proxy"
   :author "garlic0x1"
   :license "MIT"
-  :depends-on (:alexandria :cl-annot :str :bordeaux-threads
-               :usocket :chunga :flexi-streams :chipz :cl+ssl
-               :yason :puri :mito)
-  :components ((:module "src/http"
+  :depends-on (:alexandria :str :bordeaux-threads :usocket :chunga :flexi-streams
+               :chipz :cl+ssl :yason :puri :mito :queues.simple-cqueue)
+  :components ((:module "src/common"
+                :components ((:file "concurrency")))
+               (:module "src/http"
                 :components ((:file "package")
                              (:file "utils")
                              (:file "types")
@@ -29,24 +30,27 @@
                              (:file "config")))))
 
 (asdf:defsystem "mx-proxy/gtk"
-  :depends-on (:alexandria :str :cl-gtk4 :cl-gdk4 :cl-gtk4.adw)
+  :depends-on (:alexandria :str :cl-gtk4 :cl-gdk4 :micros)
   :components ((:module "frontend/gtk/widgets"
                 :components ((:file "package")
                              (:file "widget")
                              (:file "string-list")
                              (:file "generic-string-list")
                              (:file "error-message")
+                             (:file "lisp-entry")
+                             (:file "repl")
                              (:file "prompt")))
                (:module "frontend/gtk"
                 :components ((:file "package")
                              (:file "parameters")
-                             (:file "cffi")
+                             (:file "styles")
                              (:file "settings")
                              (:file "message-pair")
                              (:file "repeater")
                              (:file "traffic")
                              (:file "traffic-list")
-                             (:file "prompt")
+                             (:file "fuzzer")
+                             (:file "interface")
                              (:file "errors")
                              (:file "modeline")
                              (:file "app"))))
@@ -75,30 +79,3 @@
   :build-operation "program-op"
   :build-pathname "bin/mx-proxy"
   :entry-point "mx-proxy/tk:main")
-
-(asdf:defsystem "mx-proxy/lem"
-  :components ((:module "frontend/lem"
-                :components ((:file "package")
-                             (:file "modes")
-                             (:file "buffers")
-                             (:file "render")
-                             (:file "commands")
-                             (:file "lem")))))
-
-;; probably not going to use this one
-;; (asdf:defsystem "mx-proxy/qt"
-;;   :defsystem-depends-on (:qtools)
-;;   :depends-on (:alexandria :str :qtools :qtcore :qtgui :qtools-ui-repl)
-;;   :components ((:module "frontend/qt"
-;;                 :components ((:file "package")
-;;                              (:file "utils")
-;;                              (:file "collapsible")
-;;                              (:file "inspector")
-;;                              (:file "message-pair")
-;;                              (:file "traffic")
-;;                              (:file "prompt")
-;;                              (:file "commands")
-;;                              (:file "app"))))
-;;   :build-operation "qt-program-op"
-;;   :build-pathname "mx-proxy"
-;;   :entry-point "mx-proxy/qt:main")

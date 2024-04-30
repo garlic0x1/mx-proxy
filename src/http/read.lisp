@@ -55,10 +55,11 @@
            (read-chunked stream headers))
           (t ""))))
 
-(defun read-request (stream &key host)
+(defun read-request (stream &key host ssl-p)
   "Read HTTP request from binary stream."
   (let ((req (make-instance 'request)))
     (setf (request-host req) host
+          (request-ssl-p req) ssl-p
           (message-raw req)
           (with-capture
             (multiple-value-bind (method uri protocol) (read-status-line stream)
@@ -69,6 +70,12 @@
               (setf (message-headers req) headers
                     (message-body req) (read-body stream headers)))))
     req))
+
+(defun read-request-from-string (string &key host ssl-p)
+  (let* ((octets (flexi-streams:string-to-octets string))
+         (stream (flexi-streams:make-in-memory-input-stream octets)))
+    (unwind-protect (read-request stream :host host :ssl-p ssl-p)
+      (close stream))))
 
 (defun read-response (stream)
   "Read HTTP response from binary stream."

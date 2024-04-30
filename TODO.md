@@ -6,7 +6,6 @@
 ## Bugs:
 - server concurrency feels slow
 - chunked encoding decompression is weird
-- Tk: make all prompts/messages close on escape/cancel
 
 # Done:
 
@@ -14,6 +13,8 @@
 - parse headers again on replay (might have added bugs :{)
 - Google SSL stopped working (wtf?) (now it works?)
 - port left open on stop-server (need to panic out of the server loop)
+- Tk: make all prompts/messages close on escape/cancel (dont care)
+- SSL replays are broken (fixed)
 
 ## Features:
 - GTK focus entry on prompt
