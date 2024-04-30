@@ -40,9 +40,10 @@
   "Send a 200 response to accept the connection."
   (http:write-response stream (make-instance 'http:response)))
 
-(defun send-request-ssl (req &key raw host)
+(defun send-request-ssl (req &key raw)
   "Send a request with SSL."
-  (multiple-value-bind (host port) (http:extract-host-and-port req :host host)
+  (multiple-value-bind (host port)
+      (http:extract-host-and-port req :host (http:request-host req))
     (let ((conn (us:socket-connect host port :element-type '(unsigned-byte 8))))
       (with-ssl-client-stream (stream conn host)
         (if raw
@@ -62,4 +63,6 @@ You should only have to do this once, then restart your browser."
   (uiop:run-program "mkcert -install"))
 
 (define-command uninstall-cert-authority () ()
+  "Use mkcert to uninstal local certificate authority, do this if
+your cacert has leaked."
   (uiop:run-program "mkcert -uninstall"))

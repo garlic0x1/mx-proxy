@@ -32,13 +32,9 @@
              (lambda (button)
                (declare (ignore button))
                (let* ((req (http:message-pair-request (value self)))
-                      (edited (text-buffer-text (req-buf message-pair)))
-                      (host (http:request-host req)))
+                      (edited (text-buffer-text (req-buf message-pair))))
                  (with-ui-errors
-                   (multiple-value-bind (resp pair)
-                       (mx-proxy:replay req edited :ssl host :host host)
-                     (declare (ignore resp))
-                     (swap message-pair pair))))))))
+                   (swap message-pair (mx-proxy:replay req edited))))))))
 
 (defmethod swap ((self repeater) value)
   (setf (value self) value)

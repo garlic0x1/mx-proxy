@@ -41,7 +41,12 @@
     :col-type (or :null (:varchar 1024))
     :initarg :host
     :initform nil
-    :accessor request-host)))
+    :accessor request-host)
+   (ssl-p
+    :col-type :boolean
+    :initarg :ssl-p
+    :initform nil
+    :accessor request-ssl-p)))
 
 (mito:deftable response (message)
   ((protocol

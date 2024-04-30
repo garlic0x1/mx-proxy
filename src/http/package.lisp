@@ -12,6 +12,7 @@
    :request-uri
    :request-protocol
    :request-host
+   :request-ssl-p
    :response
    :response-protocol
    :response-status-code
@@ -22,6 +23,7 @@
    :message-pair-response
    ;; read.lisp
    :read-request
+   :read-request-from-string
    :read-response
    ;; write.lisp
    :write-raw-message

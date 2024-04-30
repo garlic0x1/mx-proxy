@@ -10,7 +10,7 @@ Automatically generates certificates to intercept and decrypt SSL messages.
 
 # GTK frontend
 
-This is the best looking frontend, but still has some missing features.
+This is the best looking frontend and it has the most features.
 
 ```bash
 make gtk

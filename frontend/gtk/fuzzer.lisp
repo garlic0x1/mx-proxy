@@ -135,9 +135,9 @@
      (mx-proxy/common/concurrency:wforeach
       workers
       (lambda (word)
-        (let* ((req (templated-request (fuzzer-req self) edited word))
-               (resp (http:send-request req :raw t))
-               (pair (make-instance 'http:message-pair :request req :response resp)))
+        (let* ((req (fuzzer-req self))
+               (text (str:replace-all "~FUZZ" word edited))
+               (pair (mx-proxy:replay req text)))
           (idle-add
            (lambda ()
              (generic-string-list-append (fuzzer-resps self) (list pair))))))
