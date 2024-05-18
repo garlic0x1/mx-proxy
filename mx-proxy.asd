@@ -29,6 +29,20 @@
                              (:file "server")
                              (:file "config")))))
 
+(asdf:defsystem "mx-proxy/clog"
+  :depends-on (:alexandria :str :clog :hiccl)
+  :components ((:module "frontend/clog"
+                :components ((:file "package")
+                             (:file "utils")
+                             (:file "html")
+                             (:file "prompt")
+                             (:file "inspector")
+                             (:file "logs")
+                             (:file "interface")
+                             (:file "messages")
+                             (:file "traffic")
+                             (:file "app")))))
+
 (asdf:defsystem "mx-proxy/gtk"
   :depends-on (:alexandria :str :cl-gtk4 :cl-gdk4 :micros)
   :components ((:module "frontend/gtk/widgets"

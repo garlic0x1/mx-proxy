@@ -1,4 +1,5 @@
 (defpackage :mx-proxy/interface
+  (:nicknames :mxp/if)
   (:use :cl :alexandria-2)
   (:export
    ;; interface.lisp

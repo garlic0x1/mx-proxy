@@ -1,6 +1,15 @@
 An interactive web proxy for debugging and testing HTTP servers.
 Automatically generates certificates to intercept and decrypt SSL messages.
 
+# Features
+
+- SSL interception
+- Modify and replay messages
+- Interactive HTTP Fuzzing
+- Graphical Lisp REPL
+- Persist proxy sessions in SQLite
+- Easy extension with hooks and commands
+
 # Dependencies
 
 - SBCL + [Ultralisp](https://ultralisp.org)

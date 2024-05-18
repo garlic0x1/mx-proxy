@@ -25,12 +25,20 @@
     (run-hook :on-message-pair mp)
     mp))
 
+(defun select-pairs-by-host (host)
+  "Get messages to a specified host."
+  (mito:select-by-sql
+   'http:message-pair
+   (sxql:select :*
+     (sxql:from (:as :message_pair :mp))
+     (sxql:join :request :on (:= :mp.request_id :request.id))
+     (sxql:where (:= :request.host host)))))
+
 (define-command load-project (path) ("fSelect file")
   "Pick a SQLite file to work with."
   (mito:disconnect-toplevel)
   (with-ui-errors (mx-proxy:connect-database :file path))
   (run-hook :on-load-project))
-
 
 (define-command save-project (path) ("fSave path")
   "Copy current project database to file."

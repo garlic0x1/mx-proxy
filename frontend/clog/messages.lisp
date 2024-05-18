@@ -1,0 +1,20 @@
+(in-package :mx-proxy/clog)
+
+(defmethod make-message-window ((msg http:request) obj)
+  (let ((win (create-gui-window obj :title "Request")))
+    (create-text-area (window-content win) :value (http:message-raw msg))))
+
+(defmethod make-message-window ((msg http:response) obj)
+  (let ((win (create-gui-window obj :title "Response")))
+    (create-text-area (window-content win) :value (http:message-raw msg))))
+
+(defmethod make-message-pair-window ((mp http:message-pair) obj)
+  (let ((win (create-gui-window obj :title "Message Pair"))
+        (req (http:message-pair-request mp))
+        (resp (http:message-pair-response mp)))
+    (create-text-area (window-content win)
+                      :value (http:message-raw req)
+                      :rows 10)
+    (create-text-area (window-content win)
+                      :value (http:message-raw resp)
+                      :rows 10)))

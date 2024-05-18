@@ -10,7 +10,7 @@
 # Done:
 
 ## Bugs:
-- parse headers again on replay (might have added bugs :{)
+- parse headers again on replay (might have added bugs :{) (fixed)
 - Google SSL stopped working (wtf?) (now it works?)
 - port left open on stop-server (need to panic out of the server loop)
 - Tk: make all prompts/messages close on escape/cancel (dont care)

@@ -35,15 +35,17 @@
 
 (defun read-chunked (stream headers)
   "Read HTTP bodies with `Content-Encoding: chunked` header."
-  (with-output-to-string (capture)
-    (loop :for line := (chunga:read-line* stream)
-          :for length := (parse-integer (str:trim line) :radix 16)
-          :do (write-line* line capture *capture*)
-          :do (let ((chunk (read-length stream length)))
-                (ignore-errors
-                  (write-string (decompress-string chunk headers) capture)))
-          :do (write-line* (chunga:read-line* stream) capture *capture*)
-          :while (not (= 0 length)))))
+  (decompress-string
+   (with-output-to-string (capture)
+     (loop :for line := (chunga:read-line* stream)
+           :for length := (parse-integer (str:trim line) :radix 16)
+           :do (write-line* line capture *capture*)
+           :do (let ((chunk (read-length stream length)))
+                 (ignore-errors
+                   (write-string chunk capture)))
+           :do (write-line* (chunga:read-line* stream) capture *capture*)
+           :while (not (= 0 length))))
+   headers))
 
 (defun read-body (stream headers)
   "Read HTTP body, checks headers to determine style."
@@ -58,8 +60,7 @@
 (defun read-request (stream &key host ssl-p)
   "Read HTTP request from binary stream."
   (let ((req (make-instance 'request)))
-    (setf (request-host req) host
-          (request-ssl-p req) ssl-p
+    (setf (request-ssl-p req) ssl-p
           (message-raw req)
           (with-capture
             (multiple-value-bind (method uri protocol) (read-status-line stream)
@@ -68,7 +69,8 @@
                     (request-protocol req) protocol))
             (let ((headers (read-headers stream)))
               (setf (message-headers req) headers
-                    (message-body req) (read-body stream headers)))))
+                    (message-body req) (read-body stream headers)
+                    (request-host req) (or host (assoc-value headers :host))))))
     req))
 
 (defun read-request-from-string (string &key host ssl-p)
