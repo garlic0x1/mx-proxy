@@ -1,20 +1,25 @@
 (in-package :mx-proxy/clog)
 
-(defmethod make-message-window ((msg http:request) obj)
-  (let ((win (create-gui-window obj :title "Request")))
+(defmethod create-message-window ((msg http:request))
+  (let ((win (create-gui-window *window* :title "Request")))
     (create-text-area (window-content win) :value (http:message-raw msg))))
 
-(defmethod make-message-window ((msg http:response) obj)
-  (let ((win (create-gui-window obj :title "Response")))
+(defmethod create-message-window ((msg http:response))
+  (let ((win (create-gui-window *window* :title "Response")))
     (create-text-area (window-content win) :value (http:message-raw msg))))
 
-(defmethod make-message-pair-window ((mp http:message-pair) obj)
-  (let ((win (create-gui-window obj :title "Message Pair"))
-        (req (http:message-pair-request mp))
-        (resp (http:message-pair-response mp)))
-    (create-text-area (window-content win)
+(defun create-message-pair-view (obj mp)
+  (let* ((div (create-div obj :style "height:100%;"))
+         (req (http:message-pair-request mp))
+         (resp (http:message-pair-response mp)))
+    (create-text-area div
                       :value (http:message-raw req)
-                      :rows 10)
-    (create-text-area (window-content win)
+                      :style "width:100%;height:50%;border:solid;")
+    (create-text-area div
                       :value (http:message-raw resp)
-                      :rows 10)))
+                      :style "width:100%;height:50%;border:solid;")
+    div))
+
+(defun create-message-pair-window (mp)
+  (let ((win (create-gui-window *window* :title "Message Pair")))
+    (create-message-pair-view (window-content win) mp)))

@@ -8,7 +8,9 @@
                      :left 0
                      :top (- (inner-height (window *window*)) *prompt-height*)
                      :width (inner-width (window *window*))
-                     :height *prompt-height*))
+                     :height *prompt-height*
+                     :keep-on-top t
+                     :client-movement nil))
 
 (defun prompt-dialog (callback message completion validation start)
   (let* ((win (create-prompt-window message))
@@ -21,15 +23,19 @@
     (setf (value entry) start
           (attribute entry "autocomplete") "off")
     (flet ((refresh-completions ()
-             (destroy ul)
-             (setf ul (create-unordered-list (window-content win) :class "w3-ul w3-hoverable")
-                   completion-items '())
-             (dolist (it (funcall completion (value entry)))
-               (setf completion-items (append completion-items (list it)))
-               (let ((li (create-list-item ul :content it)))
-                 (on (click li)
-                   (setf (value entry) it)
-                   (focus entry))))
+             (let ((new (create-unordered-list (window-content win)
+                                               :class "w3-ul w3-hoverable"
+                                               :auto-place nil)))
+               (setf completion-items '())
+               (dolist (it (funcall completion (value entry)))
+                 (setf completion-items (append completion-items (list it)))
+                 (let ((li (create-list-item new :content it)))
+                   (on (click li)
+                     (setf (value entry) it)
+                     (focus entry))))
+               (destroy ul)
+               (setf ul new)
+               (place-inside-bottom-of (window-content win) ul))
              (focus entry)))
       (refresh-completions)
       (on (click ok)
@@ -42,5 +48,6 @@
           (cond ((equal "Escape" key)
                  (window-close win))
                 ((equal "Tab" key)
-                 (setf (value entry) (car completion-items)))))
+                 (setf (value entry) (car completion-items))
+                 (refresh-completions))))
         (refresh-completions)))))

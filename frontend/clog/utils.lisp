@@ -1,5 +1,7 @@
 (in-package :mx-proxy/clog)
 
+(defparameter *table-class* "w3-table w3-striped w3-bordered w3-border w3-hoverable")
+
 (defvar *obj*)
 (defvar *ev*)
 

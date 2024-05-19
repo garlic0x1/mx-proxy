@@ -4,7 +4,8 @@
   :depends-on (:alexandria :str :bordeaux-threads :usocket :chunga :flexi-streams
                :chipz :cl+ssl :yason :puri :mito :queues.simple-cqueue)
   :components ((:module "src/common"
-                :components ((:file "concurrency")))
+                :components ((:file "concurrency")
+                             (:file "trie")))
                (:module "src/http"
                 :components ((:file "package")
                              (:file "utils")
@@ -30,18 +31,23 @@
                              (:file "config")))))
 
 (asdf:defsystem "mx-proxy/clog"
-  :depends-on (:alexandria :str :clog :hiccl)
+  :depends-on (:alexandria :str :clog :hiccl :ceramic)
   :components ((:module "frontend/clog"
                 :components ((:file "package")
                              (:file "utils")
                              (:file "html")
                              (:file "prompt")
                              (:file "inspector")
+                             (:file "repl")
                              (:file "logs")
                              (:file "interface")
                              (:file "messages")
+                             (:file "repeater")
                              (:file "traffic")
-                             (:file "app")))))
+                             (:file "app"))))
+  :build-operation "program-op"
+  :build-pathname "bin/mx-proxy"
+  :entry-point "mx-proxy/clog:main")
 
 (asdf:defsystem "mx-proxy/gtk"
   :depends-on (:alexandria :str :cl-gtk4 :cl-gdk4 :micros)

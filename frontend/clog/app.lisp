@@ -5,9 +5,6 @@
 (defvar *window*)
 (defvar *messages* nil)
 
-(defun on-help-about (obj)
-  (alert-toast obj "toasty" "toasted"))
-
 (defun on-server-start (obj)
   (declare (ignore obj))
   (mx-proxy/interface:call-with-prompts 'start-server))
@@ -48,18 +45,20 @@
        ()
        (gui-menu-item (:content "λ"
                        :on-click 'on-mx-prompt))
+       (gui-menu-item (:content "REPL"
+                       :on-click 'create-repl-window))
        (gui-menu-item (:content "Logs"
-                       :on-click 'make-logs-window))
+                       :on-click 'create-logs-window))
        (gui-menu-drop-down (:content "Traffic")
                            (gui-menu-item
                             (:content "All"
-                             :on-click (a:curry 'make-traffic-window :all)))
+                             :on-click (a:curry 'create-traffic-window :all)))
                            (gui-menu-item
                             (:content "Browser"
-                             :on-click (a:curry 'make-traffic-window :browser)))
+                             :on-click (a:curry 'create-traffic-window :browser)))
                            (gui-menu-item
                             (:content "Repeater"
-                             :on-click (a:curry 'make-traffic-window :repeater))))
+                             :on-click (a:curry 'create-traffic-window :repeater))))
        (gui-menu-drop-down (:content "Server")
                            (gui-menu-item
                             (:content "Start"
@@ -76,8 +75,13 @@
                              :on-click 'on-database-save))))))
 
 (defun main ()
+  (ceramic:setup)
+  (ceramic:start)
   (mx-proxy:connect-database)
   (initialize 'on-new-window)
-  (open-browser))
-
-;; (main)
+  ;; (bt:make-thread (lambda () (initialize 'on-new-window)))
+  ;; (sleep 10)
+  (let ((window (ceramic:make-window :url "http://localhost:8080")))
+    (ceramic:show window))
+  (loop (sleep 1))
+  )
