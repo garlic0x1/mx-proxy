@@ -1,7 +1,7 @@
 # TODO
 
 ## Features:
-- widgets for messages, maybe flash on modeline too (buggy rn)
+- CLOG modeline
 
 ## Bugs:
 - server concurrency feels slow
@@ -17,5 +17,6 @@
 - SSL replays are broken (fixed)
 
 ## Features:
+- widgets for messages, maybe flash on modeline too (buggy rn)
 - GTK focus entry on prompt
 - server global status variable, for modeline and restarting

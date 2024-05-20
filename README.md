@@ -15,7 +15,7 @@ Automatically generates certificates to intercept and decrypt SSL messages.
 - SBCL + [Ultralisp](https://ultralisp.org)
 - [FiloSottile/mkcert](https://github.com/FiloSottile/mkcert)
 - SQLite
-- GTK4 or Tcl/Tk
+- Electron, GTK4, or Tcl/Tk
 
 # GTK frontend
 
@@ -26,6 +26,14 @@ make gtk
 ```
 
 ![GTK](screenshots/gtk-frontend.png)　
+
+# Electron frontend
+
+Usable, but a work in progress.
+
+```bash
+make clog
+```
 
 # Tk frontend
 
