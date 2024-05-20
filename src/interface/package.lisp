@@ -1,4 +1,5 @@
 (defpackage :mx-proxy/interface
+  (:nicknames :mxp/if)
   (:use :cl :alexandria-2)
   (:export
    ;; interface.lisp
@@ -8,6 +9,7 @@
    :message
    :show-error-message
    :with-ui-errors
+   :with-log-errors
    :prompt-for-string*
 
    ;; utils

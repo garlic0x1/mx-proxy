@@ -21,3 +21,7 @@
 (defmacro with-ui-errors (&body body)
   `(handler-case (progn ,@body)
      (error (c) (show-error-message *interface* c))))
+
+(defmacro with-log-errors (&body body)
+  `(handler-case (progn ,@body)
+     (error (c) (message c))))

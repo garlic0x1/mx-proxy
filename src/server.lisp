@@ -14,7 +14,7 @@
 
 (defun connection-handler (conn)
   "Handle incoming connections from the client."
-  (ignore-errors
+  (with-log-errors
     (let* ((stream (us:socket-stream conn))
            (req (http:read-request stream)))
       (if (string-equal :connect (http:request-method req))

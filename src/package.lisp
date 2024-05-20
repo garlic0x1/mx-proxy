@@ -1,4 +1,5 @@
 (defpackage :mx-proxy
+  (:nicknames :mxp)
   (:use :cl :alexandria-2 :mx-proxy/interface)
   (:local-nicknames (:us :usocket) (:ssl :cl+ssl))
   (:export
