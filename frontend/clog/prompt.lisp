@@ -3,14 +3,17 @@
 (defparameter *prompt-height* 200)
 
 (defun create-prompt-window (title)
-  (create-gui-window *window*
-                     :title title
-                     :left 0
-                     :top (- (inner-height (window *window*)) *prompt-height*)
-                     :width (inner-width (window *window*))
-                     :height *prompt-height*
-                     :keep-on-top t
-                     :client-movement nil))
+  (let ((win (create-gui-window
+              *window*
+              :title title
+              :left 0
+              :top (- (inner-height (window *window*)) *prompt-height*)
+              :width (inner-width (window *window*))
+              :height *prompt-height*
+              :keep-on-top t
+              :client-movement nil)))
+    (window-make-modal win)
+    win))
 
 (defun prompt-dialog (callback message completion validation start)
   (let* ((win (create-prompt-window message))
@@ -41,11 +44,15 @@
       (on (click ok)
         (when (funcall validation (value entry))
           (funcall callback (value entry))
+          (window-end-modal win)
           (window-close win)))
-      (on (click cancel) (window-close win))
+      (on (click cancel)
+        (window-end-modal win)
+        (window-close win))
       (on (key-down entry)
         (let ((key (getf *ev* :key)))
           (cond ((equal "Escape" key)
+                 (window-end-modal win)
                  (window-close win))
                 ((equal "Tab" key)
                  (setf (value entry) (car completion-items))

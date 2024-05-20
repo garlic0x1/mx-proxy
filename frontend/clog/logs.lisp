@@ -29,7 +29,7 @@
     (create-table-heading row :content "Message")))
 
 (defun create-logs-window (obj)
-  (when *logs-window* (window-close *logs-window*))
+  ;; (when *logs-window* (window-close *logs-window*))
   (let* ((win (create-gui-window* obj :title "Logs"))
          (menu (create-gui-menu-bar (window-content win) :main-menu t))
          (table (create-table (window-content win) :class *table-class*))
