@@ -2,7 +2,8 @@
 
 (defun read-encoding (string)
   (cond ((string= "gzip" string) 'chipz:gzip)
-        ((string= "deflate" string) 'chipz:deflate)))
+        ((string= "deflate" string) 'chipz:deflate)
+        ((string= "zlib" string) 'chipz:zlib)))
 
 (defun decompress-string (string headers)
   (let ((encodings (str:words (assoc-value headers :content-encoding))))

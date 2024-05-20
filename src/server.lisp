@@ -14,19 +14,19 @@
 
 (defun connection-handler (conn)
   "Handle incoming connections from the client."
-  ;; (with-log-errors)
-  (let* ((stream (us:socket-stream conn))
-         (req (http:read-request stream)))
-    (if (string-equal :connect (http:request-method req))
-        (let ((host (puri:render-uri (http:request-uri req) nil)))
-          (write-ssl-accept stream)
-          (ssl-connection-handler conn host))
-        (progn
-          (run-hook :on-request req)
-          (let ((resp (http:send-request req :raw t)))
-            (run-hook :on-response req resp)
-            (db-insert-pair req resp)
-            (http:write-raw-message stream resp))))))
+  (with-log-errors
+    (let* ((stream (us:socket-stream conn))
+           (req (http:read-request stream)))
+      (if (string-equal :connect (http:request-method req))
+          (let ((host (puri:render-uri (http:request-uri req) nil)))
+            (write-ssl-accept stream)
+            (ssl-connection-handler conn host))
+          (progn
+            (run-hook :on-request req)
+            (let ((resp (http:send-request req :raw t)))
+              (run-hook :on-response req resp)
+              (db-insert-pair req resp)
+              (http:write-raw-message stream resp)))))))
 
 (defun replay (req edited)
   "Replay a request using the edited text of the raw message."
