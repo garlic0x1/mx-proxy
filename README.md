@@ -35,6 +35,8 @@ Usable, but a work in progress.
 make clog
 ```
 
+![CLOG](screenshots/clog-frontend.png)　
+
 # Tk frontend
 
 NOTE: Currently unmaintained, I like GTK more.  It should still work for basic stuff.
