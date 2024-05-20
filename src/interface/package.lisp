@@ -9,6 +9,7 @@
    :message
    :show-error-message
    :with-ui-errors
+   :with-log-errors
    :prompt-for-string*
 
    ;; utils

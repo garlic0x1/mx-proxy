@@ -10,9 +10,8 @@
       (on (click replay-button)
         (if:message (value req))
         (setf (text resp)
-              (if:with-ui-errors
-                (http:message-raw
-                 (http:message-pair-response
-                  (mx-proxy:replay
-                   (http:message-pair-request mp)
-                   (value req))))))))))
+              (http:message-raw
+               (http:message-pair-response
+                (mx-proxy:replay
+                 (http:message-pair-request mp)
+                 (value req)))))))))

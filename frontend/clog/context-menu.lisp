@@ -9,23 +9,17 @@
 (defun right-p (x)
   (< (- (inner-width (window *window*)) *context-menu-width*) x))
 
-(defun create-context-menu (x y items callback)
-  (let* ((panel (create-panel *window*
-                              :width *context-menu-width*
-                              :style (format nil "max-height:~apx;"
-                                             *context-menu-height*)
-                              :left x
-                              :top y :class "w3-bordered w3-black"))
-         (ul (create-unordered-list panel :class "w3-ul w3-hoverable")))
-    (setf (overflow panel) :auto
-          (overflow ul) :auto)
-    (dolist (it items)
-      (let* ((content (hiccl:render nil (format nil "~a" it)))
-             (li (create-list-item ul :content content)))
-        (on (click li)
-          (destroy panel)
-          (funcall callback it))))
+(defun create-context-menu (&key x y)
+  (let* ((panel (create-panel
+                 *window*
+                 :width *context-menu-width*
+                 :style (format nil "max-height:~apx;" *context-menu-height*)
+                 :left (1- x)
+                 :top (1- y)
+                 :class "w3-bordered w3-black")))
+    (setf (overflow panel) :auto)
+    (on (blur panel) (destroy panel))
+    (on (focus-out panel) (destroy panel))
+    (on (mouse-leave panel) (destroy panel))
+    (focus panel)
     panel))
-
-(if:define-command test-menu () ()
-  (create-context-menu 100 100 '("hi" :world (1 2 3) 1 1 1 1 1 1 11 1 1 1 1 1  a aa a a a a a1) #'if:message))

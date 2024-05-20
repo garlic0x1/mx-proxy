@@ -36,6 +36,7 @@
                 :components ((:file "package")
                              (:file "utils")
                              (:file "html")
+                             (:file "context-menu")
                              (:file "prompt")
                              (:file "inspector")
                              (:file "repl")

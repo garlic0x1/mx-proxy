@@ -35,17 +35,15 @@
 
 (defun read-chunked (stream headers)
   "Read HTTP bodies with `Content-Encoding: chunked` header."
-  (decompress-string
-   (with-output-to-string (capture)
-     (loop :for line := (chunga:read-line* stream)
-           :for length := (parse-integer (str:trim line) :radix 16)
-           :do (write-line* line capture *capture*)
-           :do (let ((chunk (read-length stream length)))
-                 (ignore-errors
-                   (write-string chunk capture)))
-           :do (write-line* (chunga:read-line* stream) capture *capture*)
-           :while (not (= 0 length))))
-   headers))
+  (with-output-to-string (capture)
+    (loop :for line := (chunga:read-line* stream)
+          :for length := (parse-integer (str:trim line) :radix 16)
+          :do (write-line* line capture *capture*)
+          :do (let ((chunk (read-length stream length)))
+                (ignore-errors
+                  (write-string (decompress-string chunk headers) capture)))
+          :do (write-line* (chunga:read-line* stream) capture *capture*)
+          :while (not (= 0 length)))))
 
 (defun read-body (stream headers)
   "Read HTTP body, checks headers to determine style."

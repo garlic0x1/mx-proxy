@@ -18,7 +18,9 @@
         (time (pretty-time (log-item-time msg)))
         (value (log-item-value msg)))
     (create-table-column row :content time)
-    (create-table-column row :content value :style "text-wrap:nowrap")
+    (create-table-column row
+                         :content (hiccl:render nil (format nil "~a" value))
+                         :style "text-wrap:nowrap")
     (on (click row)
       (create-inspector-window value))))
 
@@ -29,7 +31,6 @@
     (create-table-heading row :content "Message")))
 
 (defun create-logs-window (obj)
-  ;; (when *logs-window* (window-close *logs-window*))
   (let* ((win (create-gui-window* obj :title "Logs"))
          (menu (create-gui-menu-bar (window-content win) :main-menu t))
          (table (create-table (window-content win) :class *table-class*))
