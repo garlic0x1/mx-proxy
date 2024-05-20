@@ -109,3 +109,6 @@
                          :height *default-height*)
                 rest)
     (when *auto-balancing* (tile-windows))))
+
+(defmethod clog-gui:window-close :after ((obj clog-gui-window))
+  (tile-windows))
