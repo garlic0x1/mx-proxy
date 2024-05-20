@@ -31,7 +31,7 @@
     (create-table-column row :content (http:request-method req))
     (create-table-column row :content (puri:render-uri (http:request-uri req) nil))
     (create-table-column row :content (http:response-status-code resp))
-    (on (click row) (create-message-pair-window mp))
+    (on (click row) (create-repeater-window mp))
     row))
 
 (defun create-traffic-window* (title pred obj)

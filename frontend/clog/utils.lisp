@@ -15,15 +15,6 @@
                   ,@body))
               ,@keys)))
 
-; ??????????????????
-;; (defmacro orient-win (win top left width height)
-;;   `(progn (unless ,top
-;;             (setf (,top ,win) (unit :px (- (/ (inner-height (window *window*)) 2.0)
-;;                                            (/ (,height ,win) 2.0)))))
-;;           (unless ,left
-;;             (setf (,left ,win) (unit :px (- (/ (inner-width (window *window*)) 2.0)
-;;                                             (/ (,width ,win) 2.0)))))))
-
 (defun slot-names (obj)
   (mapcar #'sb-mop:slot-definition-name
           (sb-mop:class-slots (class-of obj))))
@@ -82,8 +73,9 @@
 (defun non-modal-windows ()
   (let* ((app (connection-data-item *window* "clog-gui"))
          (raw (a:hash-table-values (clog-gui::windows app)))
-         (modal-p (< 0 (clog-gui::modal-count app))))
-    (if modal-p (cdr raw) raw)))
+         (modal-p (< 0 (clog-gui::modal-count app)))
+         (windows (if modal-p (cdr raw) raw)))
+    (if *reverse-windows* (reverse windows) windows)))
 
 (if:define-command tile-windows (&optional obj (n 5)) ()
   (declare (ignore obj))
@@ -98,9 +90,14 @@
                   (split-window-horizontally last w))
           :do (incf index))))
 
+(if:define-command toggle-window-order () ()
+  (setf *reverse-windows* (not *reverse-windows*))
+  (tile-windows))
+
 (defparameter *default-width* 480)
 (defparameter *default-height* 480)
 (defparameter *auto-balancing* t)
+(defparameter *reverse-windows* nil)
 
 (defun create-gui-window* (obj &rest rest &key &allow-other-keys)
   (prog1 (apply (a:curry #'create-gui-window

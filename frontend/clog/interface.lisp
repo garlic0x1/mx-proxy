@@ -12,5 +12,7 @@
 (defmethod mx-proxy/interface:show-error-message
     ((interface (eql :clog)) condition &key severity)
   (declare (ignore severity))
-  (flet ()
-    (alert-dialog *window* (format nil "~a ~a" (pretty-time (get-universal-time)) condition))))
+  (alert-dialog *window* (hiccl:render nil
+                           (format nil "~a ~a"
+                                   (pretty-time (get-universal-time))
+                                   condition))))
