@@ -23,6 +23,7 @@
    :message-pair-response
    ;; read.lisp
    :read-request
+   :read-request-from-octets
    :read-request-from-string
    :read-response
    ;; write.lisp

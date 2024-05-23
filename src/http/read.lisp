@@ -71,11 +71,15 @@
                     (request-host req) (or host (assoc-value headers :host))))))
     req))
 
-(defun read-request-from-string (string &key host ssl-p)
-  (let* ((octets (flexi-streams:string-to-octets string))
-         (stream (flexi-streams:make-in-memory-input-stream octets)))
+(defun read-request-from-octets (octets &key host ssl-p)
+  (let ((stream (flexi-streams:make-in-memory-input-stream octets)))
     (unwind-protect (read-request stream :host host :ssl-p ssl-p)
       (close stream))))
+
+(defun read-request-from-string (string &key host ssl-p)
+  (read-request-from-octets (flexi-streams:string-to-octets string)
+                            :host host
+                            :ssl-p ssl-p))
 
 (defun read-response (stream)
   "Read HTTP response from binary stream."
