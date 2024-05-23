@@ -2,7 +2,8 @@
   :author "garlic0x1"
   :license "MIT"
   :depends-on (:alexandria :str :bordeaux-threads :usocket :chunga :flexi-streams
-               :chipz :cl+ssl :yason :puri :mito :queues.simple-cqueue)
+               :chipz :cl+ssl :yason :puri :mito :queues.simple-cqueue
+               :cl-async)
   :components ((:module "src/common"
                 :components ((:file "concurrency")
                              (:file "trie")))
@@ -31,7 +32,7 @@
                              (:file "config")))))
 
 (asdf:defsystem "mx-proxy/clog"
-  :depends-on (:alexandria :str :clog :hiccl :ceramic)
+  :depends-on (:alexandria :str :clog :clog/tools :hiccl :ceramic)
   :components ((:module "frontend/clog"
                 :components ((:file "package")
                              (:file "utils")
